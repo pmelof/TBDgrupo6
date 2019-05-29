@@ -1,9 +1,20 @@
 package tbd.taller1.modelo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+/*
+@Entity
+@Table(name="emisor")*/
 public class Emisor {
-
+/*
+    @Id
+    @Column
     private int emisorId;
+    @Column
     private String nombre;
+    @Column
     private int plataforma;
 
     public Emisor(){}
@@ -30,5 +41,5 @@ public class Emisor {
 
     public void setPlataforma(int plataforma) {
         this.plataforma = plataforma;
-    }
+    }*/
 }

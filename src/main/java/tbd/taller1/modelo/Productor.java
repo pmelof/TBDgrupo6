@@ -1,9 +1,20 @@
 package tbd.taller1.modelo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="productor")
 public class Productor {
 
+    @Id
+    @Column
     private int productorId;
+    @Column
     private String nombre;
+    @Column
     private String premio;      //los premios seran una lista de strings, o solo un texto?
 
     public Productor(){}

@@ -1,9 +1,20 @@
 package tbd.taller1.modelo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="personaje")
 public class Personaje {
 
+    @Id
+    @Column
     private int personajeId;
+    @Column
     private String nombre;
+    @Column
     private int genero;
 
     //constructor.

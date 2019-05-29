@@ -6,14 +6,17 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+
 @Entity
 @Table(name="actor")
-@NamedQuery(name="Actor.findAll", query="SELECT a FROM Actor a")*/
 public class Actor implements Serializable {
 
+    @Id
+    @Column
     private int actorId;
+    @Column
     private String nombre;
+    @Column
     private int genero;
 
     //constructor.

@@ -1,12 +1,23 @@
 package tbd.taller1.modelo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Date;
 
+@Entity
+@Table(name="temporada")
 public class Temporada {
 
+    @Id
+    @Column
     private int temporadaId;
+    @Column
     private int nroTemporada;
+    @Column
     private Date fechaEstreno;
+    @Column
     private int cantidadCapitulos;
 
     //constructor.
