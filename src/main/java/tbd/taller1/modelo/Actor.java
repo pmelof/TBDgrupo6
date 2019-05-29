@@ -6,11 +6,45 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
 @Entity
 @Table(name="actor")
-@NamedQuery(name="Actor.findAll", query="SELECT a FROM Actor a")
+@NamedQuery(name="Actor.findAll", query="SELECT a FROM Actor a")*/
 public class Actor implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private int actorId;
+    private String nombre;
+    private int genero;
+
+    //constructor.
+    public Actor(){}
+
+    //get and set.
+    public int getActorId() {
+        return actorId;
+    }
+
+    public void setActorId(int actorId) {
+        this.actorId = actorId;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public int getGenero() {
+        return genero;
+    }
+
+    public void setGenero(int genero) {
+        this.genero = genero;
+    }
+
+ /*   private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name="actor_id", unique=true, nullable=false)
@@ -28,7 +62,6 @@ public class Actor implements Serializable {
     @ManyToMany
     @JoinTable(name = "film_actor", joinColumns = @JoinColumn(name = "actor_id"), inverseJoinColumns = @JoinColumn(name = "film_id"))
     List<Pelicula> peliculas;
-
 
     public Actor() {
         peliculas = new ArrayList<>();
@@ -72,5 +105,5 @@ public class Actor implements Serializable {
 
     public void setPeliculas(List<Pelicula> peliculas) {
         this.peliculas = peliculas;
-    }
+    }*/
 }

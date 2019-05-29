@@ -10,11 +10,27 @@ import tbd.taller1.repositorio.PeliculaRepositorio;
 import java.sql.Timestamp;
 
 @RestController
-@RequestMapping("/actors")
+@RequestMapping("/actores")
 @CrossOrigin(origins = "*")
 public class ActorServicio {
 
     @Autowired
+    private ActorRepositorio actorRepository;
+
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public Iterable<Actor> getAllUsers() {
+        return actorRepository.findAll();
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public  Actor findOne(@PathVariable("id") Integer id) { return this.actorRepository.findActorByActorId(id);
+    }
+
+
+
+   /* @Autowired
     private ActorRepositorio actorRepository;
 
     @Autowired
@@ -46,6 +62,6 @@ public class ActorServicio {
         Actor actor = actorRepository.findActorByActorId(id);
         return actor.getPeliculas();
 
-    }
+    }*/
 
 }

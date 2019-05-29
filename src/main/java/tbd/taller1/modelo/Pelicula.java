@@ -4,17 +4,17 @@ package tbd.taller1.modelo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+/*
 import javax.persistence.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "film")
+@Table(name = "film")*/
 public class Pelicula {
 
-   @Id
+ /*  @Id
    @Column(name="film_id", unique=true, nullable=false)
    private int filmId;
 
@@ -79,5 +79,5 @@ public class Pelicula {
     public void setLastUpdate(Timestamp lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
-
+*/
 }

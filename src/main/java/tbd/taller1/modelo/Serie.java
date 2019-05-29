@@ -4,10 +4,10 @@ import java.sql.Date;
 
 public class Serie {
 
-    private int serie_id;
+    private int serieId;
     private String nombre;
-    private Date fecha_inicio;
-    private  Date fecha_fin;
+    private Date fechaInicio;
+    private  Date fechaFin;
     private  String sinopsis;
     private  String genero;
 
@@ -16,11 +16,11 @@ public class Serie {
 
     //get and set.
     public int getSerieId() {
-        return serie_id;
+        return serieId;
     }
 
     public void setSerieId(int serieId) {
-        this.serie_id = serieId;
+        this.serieId = serieId;
     }
 
     public String getNombre() {
@@ -31,20 +31,20 @@ public class Serie {
         this.nombre = nombre;
     }
 
-    public Date getFecha_inicio() {
-        return fecha_inicio;
+    public Date getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setFecha_inicio(Date fecha_inicio) {
-        this.fecha_inicio = fecha_inicio;
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
-    public Date getFecha_fin() {
-        return fecha_fin;
+    public Date getFechaFin() {
+        return fechaFin;
     }
 
-    public void setFecha_fin(Date fecha_fin) {
-        this.fecha_fin = fecha_fin;
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     public String getSinopsis() {

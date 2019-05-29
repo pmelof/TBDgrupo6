@@ -4,35 +4,44 @@ import java.sql.Date;
 
 public class Temporada {
 
-    private int temporada_id;
-    private int nro_temporada;
-    private Date fecha_estreno;
+    private int temporadaId;
+    private int nroTemporada;
+    private Date fechaEstreno;
+    private int cantidadCapitulos;
 
     //constructor.
     public Temporada(){}
 
     //get and set.
-    public int getTemporada_id() {
-        return temporada_id;
+    public int getTemporadaId() {
+        return temporadaId;
     }
 
-    public void setTemporada_id(int temporada_id) {
-        this.temporada_id = temporada_id;
+    public void setTemporadaId(int temporadaId) {
+        this.temporadaId = temporadaId;
     }
 
-    public int getNro_temporada() {
-        return nro_temporada;
+    public int getNroTemporada() {
+        return nroTemporada;
     }
 
-    public void setNro_temporada(int nro_temporada) {
-        this.nro_temporada = nro_temporada;
+    public void setNroTemporada(int nroTemporada) {
+        this.nroTemporada = nroTemporada;
     }
 
-    public Date getFecha_estreno() {
-        return fecha_estreno;
+    public Date getFechaEstreno() {
+        return fechaEstreno;
     }
 
-    public void setFecha_estreno(Date fecha_estreno) {
-        this.fecha_estreno = fecha_estreno;
+    public void setFechaEstreno(Date fechaEstreno) {
+        this.fechaEstreno = fechaEstreno;
+    }
+
+    public int getCantidadCapitulos() {
+        return cantidadCapitulos;
+    }
+
+    public void setCantidadCapitulos(int cantidadCapitulos) {
+        this.cantidadCapitulos = cantidadCapitulos;
     }
 }

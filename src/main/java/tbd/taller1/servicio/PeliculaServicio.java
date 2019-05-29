@@ -5,11 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tbd.taller1.modelo.Pelicula;
 import tbd.taller1.repositorio.PeliculaRepositorio;
-
+/*
 @RestController
-@RequestMapping("/films")
+@RequestMapping("/films")*/
 public class PeliculaServicio {
-    @Autowired
+  /*  @Autowired
     private PeliculaRepositorio peliculaRepositorio;
 
     @RequestMapping(method = RequestMethod.GET)
@@ -28,5 +28,5 @@ public class PeliculaServicio {
     @ResponseBody
     public Pelicula create(@RequestBody Pelicula resource) {
         return peliculaRepositorio.save(resource);
-    }
+    }*/
 }
