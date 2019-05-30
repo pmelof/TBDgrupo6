@@ -17,7 +17,7 @@ public class Temporada {
     private int nroTemporada;
     @Column (name="fecha_estreno", nullable=false)
     private Date fechaEstreno;
-    @Column (name="cantidad_capitulos", nullable=false)
+    @Column (name="episodios", nullable=false)
     private int cantidadCapitulos;
 
     //constructor.

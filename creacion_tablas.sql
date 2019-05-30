@@ -24,18 +24,16 @@ CREATE TABLE Tweet(
 
 CREATE TABLE Actor(
   ID_actor INTEGER PRIMARY KEY,
-  nombre varchar(32),
-  sexo INTEGER
+  nombre varchar(45)
 );
 
 CREATE TABLE Serie(
 	ID_serie INTEGER PRIMARY KEY,
-	emisor varchar(64),
-  plataforma INTEGER,
-	nombre varchar(50),
-	fecha_inicio date,
-  fecha_fin date,
-  sinopsis varchar(1024)
+	emisor varchar(45),
+	nombre varchar(45),
+	fecha_inicio int,
+  fecha_fin int,
+  sinopsis varchar(2024)
 );
 
 CREATE TABLE Temporada(
@@ -51,8 +49,7 @@ CREATE TABLE Personaje(
   ID_personaje INTEGER PRIMARY KEY,
   ID_serie INTEGER,
   ID_actor INTEGER,
-  nombre varchar(32),
-  sexo INTEGER,
+  nombre varchar(45),
   FOREIGN KEY (ID_serie) REFERENCES Serie(ID_serie),
   FOREIGN KEY (ID_actor) REFERENCES Actor(ID_actor)
 );

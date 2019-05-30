@@ -16,17 +16,13 @@ public class Serie {
     @Column (name="nombre", nullable=false, length=45)
     private String nombre;
     @Column (name="fecha_inicio", nullable=false)
-    private Date fechaInicio;
+    private int fechaInicio;
     @Column (name="fecha_fin", nullable=false)
-    private  Date fechaFin;
-    @Column (name="sinopsis", nullable=false, length=1024)
+    private  int fechaFin;
+    @Column (name="sinopsis", nullable=false, length=2024)
     private  String sinopsis;
-    @Column (name="genero", nullable=false, length=45)
-    private  String genero;
-    @Column (name="emisor", nullable=false, length=64)
+    @Column (name="emisor", nullable=false, length=45)
     private String emisor;  //nombre emisor.
-    @Column (name="plataforma", nullable=false)
-    private int plataforma; // 1 y 0.
 
     //constructor.
     public Serie(){}
@@ -48,19 +44,19 @@ public class Serie {
         this.nombre = nombre;
     }
 
-    public Date getFechaInicio() {
+    public int getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
+    public void setFechaInicio(int fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaFin() {
+    public int getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(int fechaFin) {
         this.fechaFin = fechaFin;
     }
 
@@ -72,14 +68,6 @@ public class Serie {
         this.sinopsis = sinopsis;
     }
 
-    public String getGenero() {
-        return genero;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
-
     public String getEmisor() {
         return emisor;
     }
@@ -88,11 +76,4 @@ public class Serie {
         this.emisor = emisor;
     }
 
-    public int getPlataforma() {
-        return plataforma;
-    }
-
-    public void setPlataforma(int plataforma) {
-        this.plataforma = plataforma;
-    }
 }
