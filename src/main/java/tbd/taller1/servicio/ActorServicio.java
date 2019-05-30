@@ -1,13 +1,9 @@
 package tbd.taller1.servicio;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tbd.taller1.modelo.*;
 import tbd.taller1.repositorio.ActorRepositorio;
-import tbd.taller1.repositorio.PeliculaRepositorio;
-
-import java.sql.Timestamp;
 
 @RestController
 @RequestMapping("/actores")

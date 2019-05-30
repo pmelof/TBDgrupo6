@@ -12,12 +12,12 @@ import java.util.List;
 public class Actor implements Serializable {
 
     @Id
-    @Column
+    @Column (name="ID_actor", unique=true, nullable=false)
     private int actorId;
-    @Column
+    @Column (name="nombre", nullable=false, length=45)
     private String nombre;
-    @Column
-    private int genero;
+    @Column (name="sexo", nullable=false)
+    private int sexo;
 
     //constructor.
     public Actor(){}
@@ -39,15 +39,15 @@ public class Actor implements Serializable {
         this.nombre = nombre;
     }
 
-    public int getGenero() {
-        return genero;
+    public int getSexo() {
+        return sexo;
     }
 
-    public void setGenero(int genero) {
-        this.genero = genero;
+    public void setSexo(int sexo) {
+        this.sexo = sexo;
     }
 
- /*   private static final long serialVersionUID = 1L;
+/*   private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name="actor_id", unique=true, nullable=false)

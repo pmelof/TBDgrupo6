@@ -5,7 +5,6 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import tbd.taller1.modelo.Pelicula;
 import tbd.taller1.repositorio.*;
 
 import java.util.ArrayList;
@@ -15,8 +14,6 @@ public class InfoApiSeeder {
 
     @Autowired
     private ActorRepositorio actorRepositorio;
-    private EmisorRepositorio emisorRepositorio;
-    private PeliculaRepositorio peliculaRepositorio;
     private PersonajeRepositorio personajeRepository;
     private ProductorRepositorio productorRepository;
     private SerieRepositorio serieRepository;
@@ -52,7 +49,6 @@ public class InfoApiSeeder {
                     .asJson();
 
             System.out.println(response.getBody().getObject().get("title"));
-            Pelicula peli;
 
             /*for (String id:series) {
 
@@ -62,7 +58,7 @@ public class InfoApiSeeder {
                    int fecha_inicio_serie;
                    int fecha_final_serie;
                    String sinopsis;
-                   String Emisor;
+                   String emisor;
 
                 // Temporada
 

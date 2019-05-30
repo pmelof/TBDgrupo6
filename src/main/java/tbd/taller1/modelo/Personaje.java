@@ -10,12 +10,12 @@ import javax.persistence.Table;
 public class Personaje {
 
     @Id
-    @Column
+    @Column (name="ID_personaje", unique=true, nullable=false)
     private int personajeId;
-    @Column
+    @Column (name="nombre", nullable=false, length=45)
     private String nombre;
-    @Column
-    private int genero;
+    @Column (name="sexo", nullable=false)
+    private int sexo;
 
     //constructor.
     public Personaje(){}
@@ -37,11 +37,11 @@ public class Personaje {
         this.nombre = nombre;
     }
 
-    public int getGenero() {
-        return genero;
+    public int getSexo() {
+        return sexo;
     }
 
-    public void setGenero(int genero) {
-        this.genero = genero;
+    public void setSexo(int sexo) {
+        this.sexo = sexo;
     }
 }
