@@ -11,13 +11,13 @@ import java.sql.Date;
 public class Temporada {
 
     @Id
-    @Column
+    @Column (name="ID_temporada", unique=true, nullable=false)
     private int temporadaId;
-    @Column
+    @Column (name="numero_temporada", nullable=false)
     private int nroTemporada;
-    @Column
+    @Column (name="fecha_estreno", nullable=false)
     private Date fechaEstreno;
-    @Column
+    @Column (name="cantidad_capitulos", nullable=false)
     private int cantidadCapitulos;
 
     //constructor.

@@ -11,21 +11,21 @@ import java.sql.Date;
 public class Serie {
 
     @Id
-    @Column
+    @Column (name="ID_serie", unique=true, nullable=false)
     private int serieId;
-    @Column
+    @Column (name="nombre", nullable=false, length=45)
     private String nombre;
-    @Column
+    @Column (name="fecha_inicio", nullable=false)
     private Date fechaInicio;
-    @Column
+    @Column (name="fecha_fin", nullable=false)
     private  Date fechaFin;
-    @Column
+    @Column (name="sinopsis", nullable=false, length=1024)
     private  String sinopsis;
-    @Column
+    @Column (name="genero", nullable=false, length=45)
     private  String genero;
-    @Column
+    @Column (name="emisor", nullable=false, length=64)
     private String emisor;  //nombre emisor.
-    @Column
+    @Column (name="plataforma", nullable=false)
     private int plataforma; // 1 y 0.
 
     //constructor.
