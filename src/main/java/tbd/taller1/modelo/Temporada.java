@@ -13,7 +13,7 @@ public class Temporada {
     @Column (name="numero_temporada", nullable=false)
     private int nroTemporada;
     @Column (name="fecha_estreno", nullable=false)
-    private Date fechaEstreno;
+    private int fechaEstreno;
     @Column (name="episodios", nullable=false)
     private int cantidadCapitulos;
 
@@ -41,11 +41,11 @@ public class Temporada {
         this.nroTemporada = nroTemporada;
     }
 
-    public Date getFechaEstreno() {
+    public int getFechaEstreno() {
         return fechaEstreno;
     }
 
-    public void setFechaEstreno(Date fechaEstreno) {
+    public void setFechaEstreno(int fechaEstreno) {
         this.fechaEstreno = fechaEstreno;
     }
 
@@ -55,5 +55,13 @@ public class Temporada {
 
     public void setCantidadCapitulos(int cantidadCapitulos) {
         this.cantidadCapitulos = cantidadCapitulos;
+    }
+
+    public int getIDSerie() {
+        return serie.getSerieId();
+    }
+
+    public void setIDSerie(int ID_serie) {
+        this.serie.setSerieId(ID_serie);
     }
 }
