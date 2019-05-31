@@ -6,7 +6,7 @@ import tbd.taller1.modelo.PalabraClave;
 import tbd.taller1.repositorio.PalabraClaveRepositorio;
 
 @RestController
-@RequestMapping("/tweets")
+@RequestMapping("/palabrasClaves")
 @CrossOrigin(origins = "*")
 public class PalabraClaveServicio {
     @Autowired
@@ -20,6 +20,6 @@ public class PalabraClaveServicio {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public  PalabraClave findOne(@PathVariable("id") Integer id) { return this.palabraClaveRepository.findPalabraClaveByPalabraId(id);
+    public  PalabraClave findOne(@PathVariable("id") Integer id) { return this.palabraClaveRepository.findPalabraClaveByPalabraClaveId(id);
     }
 }

@@ -1,10 +1,8 @@
 package tbd.taller1.modelo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name="serie")
@@ -23,6 +21,10 @@ public class Serie {
     private  String sinopsis;
     @Column (name="emisor", nullable=false, length=45)
     private String emisor;  //nombre emisor.
+
+    @ManyToMany
+    @JoinTable(name = "genero_serie", joinColumns = @JoinColumn(name = "ID_serie"), inverseJoinColumns = @JoinColumn(name = "ID_genero"))
+    List<Genero> generos;
 
     //constructor.
     public Serie(){}

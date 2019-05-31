@@ -17,10 +17,10 @@ public class Temporada {
     @Column (name="episodios", nullable=false)
     private int cantidadCapitulos;
 
-
     @ManyToOne
     @JoinColumn(name="ID_serie")
     private Serie serie;
+
     //constructor.
     public Temporada(){}
 

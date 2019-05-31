@@ -1,9 +1,7 @@
 package tbd.taller1.modelo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="tweet")
@@ -18,6 +16,10 @@ public class Tweet {
     private String fechaHora;
     @Column (name="geolocalizacion", nullable=false, length=225)
     private String geolocalizacion;
+
+    @ManyToMany
+    @JoinTable(name = "palabra_clave_tweet", joinColumns = @JoinColumn(name = "ID_tweet"), inverseJoinColumns = @JoinColumn(name = "ID_palabra_clave"))
+    List<PalabraClave> palabra_clave;
 
     public Tweet(){}
 
@@ -51,5 +53,13 @@ public class Tweet {
 
     public void setGeolocalizacion(String geolocalizacion) {
         this.geolocalizacion = geolocalizacion;
+    }
+
+    public List<PalabraClave> getPalabra_clave() {
+        return palabra_clave;
+    }
+
+    public void setPalabra_clave(List<PalabraClave> palabra_clave) {
+        this.palabra_clave = palabra_clave;
     }
 }
