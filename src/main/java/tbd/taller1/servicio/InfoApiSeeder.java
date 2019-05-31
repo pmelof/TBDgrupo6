@@ -15,7 +15,6 @@ public class InfoApiSeeder {
     @Autowired
     private ActorRepositorio actorRepositorio;
     private PersonajeRepositorio personajeRepository;
-    private ProductorRepositorio productorRepository;
     private SerieRepositorio serieRepository;
     private TemporadaRepositorio temporadaRepository;
 

@@ -1,9 +1,6 @@
 package tbd.taller1.modelo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -20,6 +17,10 @@ public class Temporada {
     @Column (name="episodios", nullable=false)
     private int cantidadCapitulos;
 
+
+    @ManyToOne
+    @JoinColumn(name="ID_serie")
+    private Serie serie;
     //constructor.
     public Temporada(){}
 

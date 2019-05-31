@@ -16,8 +16,6 @@ public class Actor implements Serializable {
     private int actorId;
     @Column (name="nombre", nullable=false, length=45)
     private String nombre;
-    @Column (name="sexo", nullable=false)
-    private int sexo;
 
 
 
@@ -39,14 +37,6 @@ public class Actor implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public int getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(int sexo) {
-        this.sexo = sexo;
     }
 
 /*   private static final long serialVersionUID = 1L;

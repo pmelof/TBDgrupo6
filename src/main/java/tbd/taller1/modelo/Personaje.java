@@ -11,11 +11,13 @@ public class Personaje {
     private int personajeId;
     @Column (name="nombre", nullable=false, length=45)
     private String nombre;
-    @Column (name="sexo", nullable=false)
-    private int sexo;
 
     @ManyToOne
-    @JoinTable(name = "ID_actor")
+    @JoinColumn(name="ID_serie")
+    private Serie serie;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_actor")
     private Actor actor;
 
     //constructor.
@@ -38,19 +40,4 @@ public class Personaje {
         this.nombre = nombre;
     }
 
-    public int getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(int sexo) {
-        this.sexo = sexo;
-    }
-
-    public Actor getActor() {
-        return actor;
-    }
-
-    public void setActor(Actor actor) {
-        this.actor = actor;
-    }
 }
