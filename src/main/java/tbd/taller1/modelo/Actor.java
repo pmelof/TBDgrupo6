@@ -19,6 +19,8 @@ public class Actor implements Serializable {
     @Column (name="sexo", nullable=false)
     private int sexo;
 
+
+
     //constructor.
     public Actor(){}
 

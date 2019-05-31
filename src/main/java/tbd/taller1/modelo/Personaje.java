@@ -1,9 +1,6 @@
 package tbd.taller1.modelo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="personaje")
@@ -16,6 +13,10 @@ public class Personaje {
     private String nombre;
     @Column (name="sexo", nullable=false)
     private int sexo;
+
+    @ManyToOne
+    @JoinTable(name = "ID_actor")
+    private Actor actor;
 
     //constructor.
     public Personaje(){}
@@ -43,5 +44,13 @@ public class Personaje {
 
     public void setSexo(int sexo) {
         this.sexo = sexo;
+    }
+
+    public Actor getActor() {
+        return actor;
+    }
+
+    public void setActor(Actor actor) {
+        this.actor = actor;
     }
 }
