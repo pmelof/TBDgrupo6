@@ -20,6 +20,9 @@ public class Personaje {
     @JoinColumn(name = "ID_actor")
     private Actor actor;
 
+    @OneToOne(mappedBy = "personaje")
+    private EstadisticaTweet estadisticaTweet;
+
     //constructor.
     public Personaje(){}
 

@@ -26,9 +26,9 @@ public class PalabraClave {
     @JoinColumn(name="ID_actor")
     private Actor actor;
 
-    @ElementCollection
-    @ManyToMany(mappedBy = "palabra_clave")
-    List<Tweet> tweet;
+ //   @ElementCollection
+    @ManyToMany(mappedBy = "palabras_claves")
+    List<Tweet> tweets;
 
     public PalabraClave(){}
 
@@ -72,11 +72,11 @@ public class PalabraClave {
         this.actor = actor;
     }
 
-    public List<Tweet> getTweet() {
-        return tweet;
+    public List<Tweet> getTweets() {
+        return tweets;
     }
 
-    public void setTweet(List<Tweet> tweet) {
-        this.tweet = tweet;
+    public void setTweets(List<Tweet> tweets) {
+        this.tweets = tweets;
     }
 }

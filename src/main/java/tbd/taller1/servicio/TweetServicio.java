@@ -32,6 +32,6 @@ public class TweetServicio {
     @ResponseBody
     public Iterable<PalabraClave> palabrasClavesTweet(@PathVariable("id") Integer id) {
         Tweet tweet = tweetRepository.findTweetByTweetId(id);
-        return tweet.getPalabra_clave();
+        return tweet.getPalabras_claves();
     }
 }

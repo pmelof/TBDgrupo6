@@ -14,7 +14,7 @@ public class Genero {
     @Column (name="nombre", nullable=false, length=32)
     private String nombre;
 
-    @ElementCollection
+//    @ElementCollection
     @ManyToMany(mappedBy = "generos")
     List<Serie> series;
 

@@ -19,7 +19,7 @@ public class Tweet {
 
     @ManyToMany
     @JoinTable(name = "palabra_clave_tweet", joinColumns = @JoinColumn(name = "ID_tweet"), inverseJoinColumns = @JoinColumn(name = "ID_palabra_clave"))
-    List<PalabraClave> palabra_clave;
+    List<PalabraClave> palabras_claves;
 
     public Tweet(){}
 
@@ -55,11 +55,11 @@ public class Tweet {
         this.geolocalizacion = geolocalizacion;
     }
 
-    public List<PalabraClave> getPalabra_clave() {
-        return palabra_clave;
+    public List<PalabraClave> getPalabras_claves() {
+        return palabras_claves;
     }
 
-    public void setPalabra_clave(List<PalabraClave> palabra_clave) {
-        this.palabra_clave = palabra_clave;
+    public void setPalabras_claves(List<PalabraClave> palabras_claves) {
+        this.palabras_claves = palabras_claves;
     }
 }

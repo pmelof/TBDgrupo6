@@ -26,6 +26,9 @@ public class Serie {
     @JoinTable(name = "genero_serie", joinColumns = @JoinColumn(name = "ID_serie"), inverseJoinColumns = @JoinColumn(name = "ID_genero"))
     List<Genero> generos;
 
+    @OneToOne(mappedBy = "serie")
+    private EstadisticaTweet estadisticaTweet;
+
     //constructor.
     public Serie(){}
 
