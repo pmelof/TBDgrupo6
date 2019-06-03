@@ -24,6 +24,14 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.3.6'
     compile 'org.apache.httpcomponents:httpasyncclient:4.0.2'
     compile 'org.apache.httpcomponents:httpmime:4.3.6'
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
     compile 'org.json:json:20140107'
+    compile 'io.springfox:springfox-swagger2:2.9.2'
+    compile 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    compile 'org.springframework.boot:spring-boot-starter'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.apache.opennlp:opennlp-tools:1.8.4'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
