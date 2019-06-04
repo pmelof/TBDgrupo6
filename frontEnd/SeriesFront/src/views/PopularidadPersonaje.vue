@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <h1>Popularidad Personaje</h1>
+      <h1>Popularidad de personajes de series</h1>
     </el-header>
     <el-main>
       <el-row :gutter="20">
@@ -12,7 +12,6 @@
         </el-col>
         <el-col :span="18">
           <el-card class="box-card">
-            <h3>Gráfico</h3>
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
         </el-col>
@@ -28,20 +27,9 @@ export default {
             chartOptions: {
                 series: [
                     {
-                        name: 'Year 1800',
-                        data: [107, 31, 635, 203, 2],
-                    },
-                    {
-                        name: 'Year 1900',
-                        data: [133, 156, 947, 408, 6],
-                    },
-                    {
-                        name: 'Year 2000',
-                        data: [814, 841, 3714, 727, 31],
-                    },
-                    {
-                        name: 'Year 2016',
-                        data: [1216, 1001, 4436, 738, 40],
+                        name: 'Popularidad relativa',
+                        data: [814, 841, 3714],
+                        color: 'blue',
                     },
                 ],
                 chart: {
@@ -49,19 +37,17 @@ export default {
                     type: 'bar',
                 },
                 title: {
-                    text: 'Historic World Population by Region',
+                    text: 'Popularidad relativa de personajes de series',
                 },
                 subtitle: {
                     text:
-                        'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>',
+                        '(estadísticas obtenidas de la red social Twitter)',
                 },
                 xAxis: {
                     categories: [
-                        'Africa',
-                        'America',
-                        'Asia',
-                        'Europe',
-                        'Oceania',
+                        'Cersei Lannister, de Game of Thrones',
+                        'Rick Grimes, de The Walking Dead',
+                        'Walter White, de Breaking Bad',
                     ],
                     title: {
                         text: null,
@@ -70,7 +56,7 @@ export default {
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Population (millions)',
+                        text: 'Popularidad relativa (calculada en base al número de tuits)',
                         align: 'high',
                     },
                     labels: {
@@ -78,7 +64,7 @@ export default {
                     },
                 },
                 tooltip: {
-                    valueSuffix: ' millions',
+                    valueSuffix: '',
                 },
                 plotOptions: {
                     bar: {

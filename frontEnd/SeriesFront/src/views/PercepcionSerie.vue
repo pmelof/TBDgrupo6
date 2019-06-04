@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <h1>Percepción Serie</h1>
+      <h1>Percepción de series</h1>
     </el-header>
     <el-main>
       <el-row :gutter="20">
@@ -27,20 +27,19 @@ export default {
             chartOptions: {
                 series: [
                     {
-                        name: 'Year 1800',
+                        name: 'Positiva',
                         data: [107, 31, 635, 203, 2],
+                        color: 'green',
                     },
                     {
-                        name: 'Year 1900',
+                        name: 'Neutra',
                         data: [133, 156, 947, 408, 6],
+                        color: 'grey',
                     },
                     {
-                        name: 'Year 2000',
+                        name: 'Negativa',
                         data: [814, 841, 3714, 727, 31],
-                    },
-                    {
-                        name: 'Year 2016',
-                        data: [1216, 1001, 4436, 738, 40],
+                        color: 'red',
                     },
                 ],
                 chart: {
@@ -48,19 +47,19 @@ export default {
                     type: 'bar',
                 },
                 title: {
-                    text: 'Historic World Population by Region',
+                    text: 'Percepción de series',
                 },
                 subtitle: {
                     text:
-                        'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>',
+                        '(estadísticas obtenidas de la red social Twitter)',
                 },
                 xAxis: {
                     categories: [
-                        'Africa',
-                        'America',
-                        'Asia',
-                        'Europe',
-                        'Oceania',
+                        'Game of Thrones',
+                        'Breaking Bad',
+                        'Chernobyl',
+                        'BoJack Horseman',
+                        'The Walking Dead',
                     ],
                     title: {
                         text: null,
@@ -69,7 +68,7 @@ export default {
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Population (millions)',
+                        text: 'Número de tuits',
                         align: 'high',
                     },
                     labels: {
@@ -77,7 +76,7 @@ export default {
                     },
                 },
                 tooltip: {
-                    valueSuffix: ' millions',
+                    valueSuffix: ' tuits',
                 },
                 plotOptions: {
                     bar: {
@@ -104,8 +103,6 @@ export default {
     },
 }
 </script>
-
-
 
 <style scoped>
 .el-card {
