@@ -20,8 +20,9 @@ public class Personaje {
     @JoinColumn(name = "ID_actor")
     private Actor actor;
 
-    @OneToOne(mappedBy = "personaje")
-    private EstadisticaTweet estadisticaTweet;
+    @OneToOne
+    @JoinColumn(name = "ID_estadistica_tweet")
+    private EstadisticaTweet estadisticaTweetPersonaje;
 
     //constructor.
     public Personaje(){}

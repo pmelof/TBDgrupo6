@@ -17,8 +17,10 @@ public class Actor implements Serializable {
     @Column (name="nombre", nullable=false, length=45)
     private String nombre;
 
-    @OneToOne(mappedBy = "serie")
-    private EstadisticaTweet estadisticaTweet;
+    @OneToOne
+    @JoinColumn(name = "ID_estadistica_tweet")
+    private EstadisticaTweet estadisticaTweetActor;
+
 
     //constructor.
     public Actor(){}

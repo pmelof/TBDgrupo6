@@ -18,16 +18,12 @@ public class EstadisticaTweet {
     @Column (name="nro_tweets_neutros", nullable=false)
     private int nroTweetsNeutros;
 
-    @OneToOne
-    @JoinColumn(name = "ID_serie")
+    @OneToOne(mappedBy = "estadisticaTweetSerie")
     private Serie serie;
 
-    @OneToOne
-    @JoinColumn(name = "ID_personaje")
+    @OneToOne(mappedBy = "estadisticaTweetPersonaje")
     private Personaje personaje;
 
-    @OneToOne
-    @JoinColumn(name = "ID_actor")
+    @OneToOne(mappedBy = "estadisticaTweetActor")
     private Actor actor;
-
 }
