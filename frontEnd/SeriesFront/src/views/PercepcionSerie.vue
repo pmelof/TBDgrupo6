@@ -8,6 +8,7 @@
         <el-col :span="6">
           <el-card class="box-card">
             <h3>Filtro</h3>
+            <h5>Seleccione una o más series</h5>
           </el-card>
         </el-col>
         <el-col :span="18">
