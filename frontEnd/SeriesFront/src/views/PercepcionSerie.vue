@@ -40,7 +40,7 @@ export default {
                     {
                         name: 'Negativa',
                         data: [814, 841, 3714, 727, 31],
-                        color: 'red',
+                        color: 'purple',
                     },
                 ],
                 chart: {

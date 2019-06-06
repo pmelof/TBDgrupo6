@@ -2,7 +2,7 @@
   <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
     <div class="logoSpace">
       <router-link to="/">
-        <img src="@/assets/logoSeries.svg" id="logo" alt="logo">
+        <img src="@/assets/Logo series.png" id="logo" alt="logo">
       </router-link>
     </div>
     <el-divider></el-divider>
@@ -82,7 +82,7 @@ export default {
     margin-top: 15px;
 }
 #logo {
-    height: 80px;
+    height: 75px;
 }
 .el-divider {
     display: inline-block;

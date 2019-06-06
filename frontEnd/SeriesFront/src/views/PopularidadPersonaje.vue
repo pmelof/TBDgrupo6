@@ -30,7 +30,7 @@ export default {
                     {
                         name: 'Popularidad relativa',
                         data: [814, 841, 3714],
-                        color: 'blue',
+                        color: '#2f7ed8',
                     },
                 ],
                 chart: {

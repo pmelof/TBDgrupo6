@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <img src="@/assets/Fondo series 2.png" id="fondo" alt="fondo" class="fondo">
+    <h2 style="color:#2f7ed8">¡Bienvenido!</h2>
+    <h4 style="color:#2f7ed8">En este sitio usted encontrará estadísticas sobre las series de televisión más relevantes del último tiempo.</h4>
   </div>
 </template>
 
@@ -18,15 +21,7 @@ export default {
 </script>
 
 <style scoped>
-.home {
-  background: url('~@/assets/Fondo series.png');
-  background-size: contain, cover;
-  width: 100%;
-  height: 100vh;
-  margin-left: -20px;
-  margin-right: -20px;
-  margin-top: -20px;
-  margin-bottom: -20px;
+.fondo {
+  width: 40%;
 }
-
 </style>
