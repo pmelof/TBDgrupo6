@@ -18,20 +18,35 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.apache.opennlp:opennlp-tools:1.8.4'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+
+    //Sql
     runtimeOnly 'mysql:mysql-connector-java'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile 'com.mashape.unirest:unirest-java:1.4.9'
     compile 'org.apache.httpcomponents:httpclient:4.3.6'
     compile 'org.apache.httpcomponents:httpasyncclient:4.0.2'
     compile 'org.apache.httpcomponents:httpmime:4.3.6'
+
+    //MongoDB
     compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+    //JsonConfi
     compile 'org.json:json:20140107'
+
+    //Elastic Search
+    compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-high-level-client', version: '6.4.2'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.7'
+    compile group: 'org.springframework', name: 'spring-web', version: '5.1.2.RELEASE'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'
+    //Swagger
     compile 'io.springfox:springfox-swagger2:2.9.2'
     compile 'io.springfox:springfox-swagger-ui:2.9.2'
+    
 
-    compile 'org.springframework.boot:spring-boot-starter'
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.apache.opennlp:opennlp-tools:1.8.4'
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
