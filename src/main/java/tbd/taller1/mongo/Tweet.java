@@ -3,7 +3,7 @@ package tbd.taller1.mongo;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection ="statusJSONImpl")
+@Document(collection ="tweets")
 public class Tweet {
     @Id
     private String id;

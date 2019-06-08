@@ -11,6 +11,6 @@ public class TweetService {
     @Autowired
     TweetRepository repository;
 
-    @RequestMapping("/tweeters")
+    @RequestMapping("/tweets")
     public List<Tweet> getTweets(){return repository.findAll();}
 }
