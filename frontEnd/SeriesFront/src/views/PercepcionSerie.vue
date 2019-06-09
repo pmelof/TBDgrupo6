@@ -22,7 +22,7 @@
                 <span class="checkmark"></span> Chernobyl
             </label>
             <br>
-            <label class="button">Filtrar</label>
+            <label class="button">Filtrar.</label>
           </el-card>
         </el-col>
         <el-col :span="18">
