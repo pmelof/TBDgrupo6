@@ -1,13 +1,8 @@
 <template>
   <div class="home">
-    <el-container>
-      <el-header>
-        <h1>Bienvenido</h1>
-      </el-header>
-      <el-main>
-        <GraphicCard/>
-      </el-main>
-    </el-container>
+    <img src="@/assets/Fondo series 2.png" id="fondo" alt="fondo" class="fondo">
+    <h2 style="color:#2f7ed8">¡Bienvenido!</h2>
+    <h4 style="color:#2f7ed8">En este sitio usted encontrará estadísticas sobre las series de televisión más relevantes del último tiempo.</h4>
   </div>
 </template>
 
@@ -26,5 +21,7 @@ export default {
 </script>
 
 <style scoped>
+.fondo {
+  width: 40%;
+}
 </style>
-

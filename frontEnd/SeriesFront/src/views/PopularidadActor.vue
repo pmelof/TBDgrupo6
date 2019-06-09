@@ -1,13 +1,28 @@
 <template>
   <el-container>
     <el-header>
-      <h1>Popularidad Actor</h1>
+      <h1>Popularidad de actores de series</h1>
     </el-header>
     <el-main>
       <el-row :gutter="20">
         <el-col :span="6">
           <el-card class="box-card">
             <h3>Filtro</h3>
+            <h5>Seleccione uno o<br> más actores</h5>
+            <label class="container">
+                <input type="checkbox" checked="checked">
+                <span class="checkmark"></span> Peter Dinklage
+            </label>
+            <label class="container">
+                <input type="checkbox" checked="checked">
+                <span class="checkmark"></span> Emilia Clarke
+            </label>
+            <label class="container">
+                <input type="checkbox" checked="checked">
+                <span class="checkmark"></span> Bryan Cranston
+            </label>
+            <br>
+            <label class="button">Filtrar</label>
           </el-card>
         </el-col>
         <el-col :span="18">
@@ -27,20 +42,9 @@ export default {
             chartOptions: {
                 series: [
                     {
-                        name: 'Year 1800',
-                        data: [107, 31, 635, 203, 2],
-                    },
-                    {
-                        name: 'Year 1900',
-                        data: [133, 156, 947, 408, 6],
-                    },
-                    {
-                        name: 'Year 2000',
-                        data: [814, 841, 3714, 727, 31],
-                    },
-                    {
-                        name: 'Year 2016',
-                        data: [1216, 1001, 4436, 738, 40],
+                        name: 'Popularidad relativa',
+                        data: [133, 156, 947],
+                        color: '#2f7ed8',
                     },
                 ],
                 chart: {
@@ -48,19 +52,17 @@ export default {
                     type: 'bar',
                 },
                 title: {
-                    text: 'Historic World Population by Region',
+                    text: 'Popularidad relativa de actores de series',
                 },
                 subtitle: {
                     text:
-                        'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>',
+                        '(estadísticas obtenidas de la red social Twitter)',
                 },
                 xAxis: {
                     categories: [
-                        'Africa',
-                        'America',
-                        'Asia',
-                        'Europe',
-                        'Oceania',
+                        'Peter Dinklage, de Game of Thrones',
+                        'Emilia Clarke, de Game of Thrones',
+                        'Bryan Cranston, de Breaking Bad',
                     ],
                     title: {
                         text: null,
@@ -69,7 +71,7 @@ export default {
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Population (millions)',
+                        text: 'Popularidad relativa (calculada en base al número de tuits)',
                         align: 'high',
                     },
                     labels: {
@@ -77,7 +79,7 @@ export default {
                     },
                 },
                 tooltip: {
-                    valueSuffix: ' millions',
+                    valueSuffix: '',
                 },
                 plotOptions: {
                     bar: {
@@ -114,5 +116,82 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+.container {
+  display: block;
+  position: relative;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.button {
+  background-color: #2196F3;
+  border: none;
+  border-radius: 2px;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
 }
 </style>
