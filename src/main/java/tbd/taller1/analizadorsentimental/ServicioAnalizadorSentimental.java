@@ -15,26 +15,33 @@ public class ServicioAnalizadorSentimental {
     private Classifier classifier;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String classify(@RequestParam(value="text") String text) {
+    public int classify(@RequestParam(value="text") String text) {
 
         double[] resultSentimentalTweet = this.classifier.classify(text);
 
         if(resultSentimentalTweet[0] == 1){
 
-            System.out.println("Tweet Positivo\n");
-            return "##Tweet Positivo\n porcentaje Positivo:"+resultSentimentalTweet[1]+"\nporcentaje Negativo:"+resultSentimentalTweet[2]+"\n" ;
+            //System.out.println("Tweet Positivo\n");
+
+            return 1;
+            //return "##Tweet Positivo\n porcentaje Positivo:"+resultSentimentalTweet[1]+"\nporcentaje Negativo:"+resultSentimentalTweet[2]+"\n" ;
         }
         else if(resultSentimentalTweet[0] == 0){
 
-            System.out.println("Tweet Neutro\n");
-            return "##Tweet Neutro\n porcentaje Positivo:"+resultSentimentalTweet[1]+"\nporcentaje Negativo:"+resultSentimentalTweet[2]+"\n" ;
+            //System.out.println("Tweet Neutro\n");
+            //return "##Tweet Neutro\n porcentaje Positivo:"+resultSentimentalTweet[1]+"\nporcentaje Negativo:"+resultSentimentalTweet[2]+"\n" ;
+            return 0;
         }
         else if(resultSentimentalTweet[0] == -1){
 
-            System.out.println("Tweet Negativo\n");
-            return "##Tweet Negativo\n porcentaje Positivo:"+resultSentimentalTweet[1]+"\nporcentaje Negativo:"+resultSentimentalTweet[2]+"\n\n" ;
+            //System.out.println("Tweet Negativo\n");
+            //return "##Tweet Negativo\n porcentaje Positivo:"+resultSentimentalTweet[1]+"\nporcentaje Negativo:"+resultSentimentalTweet[2]+"\n\n" ;
+
+            return -1;
         }
-        return "ALERTA NO ENTRE CORRECTAMENTE EN IF 'classify'";
+        //return "ALERTA NO ENTRE CORRECTAMENTE EN IF 'classify'";
+
+        return 99;
     }
     public Classifier getClassifier() {
         return classifier;

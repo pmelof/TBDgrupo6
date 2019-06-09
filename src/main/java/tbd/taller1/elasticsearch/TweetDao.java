@@ -55,6 +55,10 @@ public class TweetDao {
 		return sourceAsMap;
 	}
 
+
+
+
+
 	public Map<String, Object> updateTweetById(String id, Tweet tweet) {
 		UpdateRequest updateRequest = new UpdateRequest(INDEX, TYPE, id).fetchSource(true);
 		Map<String, Object> error = new HashMap<>();

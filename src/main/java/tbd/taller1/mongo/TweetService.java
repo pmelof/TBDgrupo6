@@ -9,8 +9,8 @@ import java.util.List;
 @RestController
 public class TweetService {
     @Autowired
-    TweetRepository repository;
+    TweetRepository tweetRepository;
 
-    @RequestMapping("/tweets")
-    public List<Tweet> getTweets(){return repository.findAll();}
+    @RequestMapping("/twitter")
+    public Iterable<Tweet> getTweets(){return tweetRepository.findAll();}
 }
