@@ -67,11 +67,11 @@ INSERT INTO `temporada` (`id_temporada`,`episodios`,`fecha_estreno`,`numero_temp
 INSERT INTO `temporada` (`id_temporada`,`episodios`,`fecha_estreno`,`numero_temporada`,`id_serie`) VALUES (53,8,2015,2,12);
 INSERT INTO `temporada` (`id_temporada`,`episodios`,`fecha_estreno`,`numero_temporada`,`id_serie`) VALUES (54,8,2019,3,12);
 
-INSERT INTO `actor` (`id_actor`,`nombre`) VALUES (1,'Bryan Cranston');
-INSERT INTO `actor` (`id_actor`,`nombre`) VALUES (2,'Anna Gunn');
-INSERT INTO `actor` (`id_actor`,`nombre`) VALUES (3,'Aaron Paul');
+INSERT INTO `actor` (`id_actor`,`nombre`,`id_estadistica_tweet`) VALUES (1,'Bryan Cranston',1);
+INSERT INTO `actor` (`id_actor`,`nombre`,`id_estadistica_tweet`) VALUES (2,'Anna Gunn',2);
+INSERT INTO `actor` (`id_actor`,`nombre`,`id_estadistica_tweet`) VALUES (3,'Aaron Paul',3);
 INSERT INTO `actor` (`id_actor`,`nombre`) VALUES (4,'Dean Norris');
-INSERT INTO `actor` (`id_actor`,`nombre`) VALUES (5,'Norman Reedus);
+INSERT INTO `actor` (`id_actor`,`nombre`) VALUES (5,'Norman Reedus');
 INSERT INTO `actor` (`id_actor`,`nombre`) VALUES (6,'Melissa McBride');
 INSERT INTO `actor` (`id_actor`,`nombre`) VALUES (7,'Andrew Lincoln');
 INSERT INTO `actor` (`id_actor`,`nombre`) VALUES (8,'Lauren Cohan');

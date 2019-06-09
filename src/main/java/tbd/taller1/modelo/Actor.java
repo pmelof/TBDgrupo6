@@ -12,6 +12,7 @@ import java.util.List;
 public class Actor implements Serializable {
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column (name="ID_actor", unique=true, nullable=false)
     private int actorId;
     @Column (name="nombre", nullable=false, length=45)

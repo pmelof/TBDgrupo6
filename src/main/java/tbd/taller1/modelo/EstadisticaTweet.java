@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class EstadisticaTweet {
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="ID_estadistica_tweet", unique=true, nullable=false)
     private int estadisticaTweetId;
     @Column (name="nro_tweets", nullable=false)
