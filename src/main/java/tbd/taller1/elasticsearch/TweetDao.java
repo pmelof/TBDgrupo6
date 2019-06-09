@@ -19,20 +19,20 @@ import java.util.Map;
 import java.util.UUID;
 
 @Repository
-public class BookDao {
-	private final String INDEX = "bookdata";
-	private final String TYPE = "books";
+public class TweetDao {
+	private final String INDEX = "tbd";
+	private final String TYPE = "tweets";
 	private RestHighLevelClient restHighLevelClient;
 	private ObjectMapper objectMapper;
 
-	public BookDao(ObjectMapper objectMapper, RestHighLevelClient restHighLevelClient) {
+	public TweetDao(ObjectMapper objectMapper, RestHighLevelClient restHighLevelClient) {
 		this.objectMapper = objectMapper;
 		this.restHighLevelClient = restHighLevelClient;
 	}
 
-	public Book insertBook(Book book) {
-		book.setId(UUID.randomUUID().toString());
-		IndexRequest indexRequest = new IndexRequest(INDEX, TYPE, book.getId()).source(objectMapper.convertValue(book, Map.class));
+	public Tweet insertTweet(Tweet tweet) {
+
+		IndexRequest indexRequest = new IndexRequest(INDEX, TYPE, tweet.getId()).source(objectMapper.convertValue(tweet, Map.class));
 		try {
 			restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
 		} catch (ElasticsearchException e) {
@@ -40,10 +40,10 @@ public class BookDao {
 		} catch (java.io.IOException ex) {
 			ex.getLocalizedMessage();
 		}
-		return book;
+		return tweet;
 	}
 
-	public Map<String, Object> getBookById(String id) {
+	public Map<String, Object> getTweetById(String id) {
 		GetRequest getRequest = new GetRequest(INDEX, TYPE, id);
 		GetResponse getResponse = null;
 		try {
@@ -55,12 +55,12 @@ public class BookDao {
 		return sourceAsMap;
 	}
 
-	public Map<String, Object> updateBookById(String id, Book book) {
+	public Map<String, Object> updateTweetById(String id, Tweet tweet) {
 		UpdateRequest updateRequest = new UpdateRequest(INDEX, TYPE, id).fetchSource(true);
 		Map<String, Object> error = new HashMap<>();
 		error.put("Error", "Unable to update book");
 		try {
-			String bookJson = objectMapper.writeValueAsString(book);
+			String bookJson = objectMapper.writeValueAsString(tweet);
 			updateRequest.doc(bookJson, XContentType.JSON);
 			UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
 			Map<String, Object> sourceAsMap = updateResponse.getGetResult().sourceAsMap();
@@ -73,7 +73,7 @@ public class BookDao {
 		return error;
 	}
 
-	public void deleteBookById(String id) {
+	public void deleteTweetById(String id) {
 		DeleteRequest deleteRequest = new DeleteRequest(INDEX, TYPE, id);
 		try {
 			restHighLevelClient.delete(deleteRequest, RequestOptions.DEFAULT);
