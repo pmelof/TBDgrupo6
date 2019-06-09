@@ -1,5 +1,9 @@
 package tbd.taller1.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
@@ -24,6 +28,8 @@ public class Serie {
 
     @ManyToMany
     @JoinTable(name = "genero_serie", joinColumns = @JoinColumn(name = "ID_serie"), inverseJoinColumns = @JoinColumn(name = "ID_genero"))
+    //@JsonManagedReference
+    @JsonIgnore
     List<Genero> generos;
 
     @OneToOne
@@ -82,4 +88,19 @@ public class Serie {
         this.emisor = emisor;
     }
 
+    public List<Genero> getGeneros() {
+        return generos;
+    }
+
+    public void setGeneros(List<Genero> generos) {
+        this.generos = generos;
+    }
+
+    public EstadisticaTweet getEstadisticaTweetSerie() {
+        return estadisticaTweetSerie;
+    }
+
+    public void setEstadisticaTweetSerie(EstadisticaTweet estadisticaTweetSerie) {
+        this.estadisticaTweetSerie = estadisticaTweetSerie;
+    }
 }

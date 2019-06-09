@@ -2,6 +2,8 @@ HELP.md
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
+/frontEnd/SeriesFront/node_modules
+/frontEnd/node_modules
 
 ### STS ###
 .apt_generated

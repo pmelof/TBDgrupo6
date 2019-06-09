@@ -1,5 +1,7 @@
 package tbd.taller1.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class Tweet {
 
     @ManyToMany
     @JoinTable(name = "palabra_clave_tweet", joinColumns = @JoinColumn(name = "ID_tweet"), inverseJoinColumns = @JoinColumn(name = "ID_palabra_clave"))
+    @JsonIgnore
     List<PalabraClave> palabras_claves;
 
     public Tweet(){}
