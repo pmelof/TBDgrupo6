@@ -64,7 +64,7 @@ export default {
                 chart: {
                     renderTo: 'container',
                     type: 'bar',
-                    height: 700,
+                    height: 650,
                 },
                 title: {
                     text: 'Percepción de series',
