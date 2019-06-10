@@ -1,6 +1,8 @@
 package tbd.taller1.modelo;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class Genero {
 
 //    @ElementCollection
     @ManyToMany(mappedBy = "generos")
+  //  @JsonBackReference
     List<Serie> series;
 
     public Genero(){}

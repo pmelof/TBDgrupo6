@@ -43,4 +43,11 @@ public class Actor implements Serializable {
         this.nombre = nombre;
     }
 
+    public EstadisticaTweet getEstadisticaTweetActor() {
+        return estadisticaTweetActor;
+    }
+
+    public void setEstadisticaTweetActor(EstadisticaTweet estadisticaTweetActor) {
+        this.estadisticaTweetActor = estadisticaTweetActor;
+    }
 }
