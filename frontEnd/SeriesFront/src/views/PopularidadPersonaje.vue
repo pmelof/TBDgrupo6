@@ -113,14 +113,16 @@ export default {
                 this.personajes = response.data
                 for (var personaje of this.personajes) {
                     if (personaje.estadisticaTweetPersonaje != null) {
-                        this.chartOptions.xAxis.categories.push(
-                            personaje.nombre.concat(
-                                ' | ' + personaje.serie.nombre
+                        if (personaje.estadisticaTweetPersonaje.nroTweets > 0) {
+                            this.chartOptions.xAxis.categories.push(
+                                personaje.nombre.concat(
+                                    ' | ' + personaje.serie.nombre
+                                )
                             )
-                        )
-                        this.chartOptions.series[0].data.push(
-                            personaje.estadisticaTweetPersonaje.nroTweets
-                        )
+                            this.chartOptions.series[0].data.push(
+                                personaje.estadisticaTweetPersonaje.nroTweets
+                            )
+                        }
                     }
                     // console.log(personaje.nombre)
                 }
