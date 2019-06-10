@@ -55,6 +55,7 @@ export default {
                 chart: {
                     renderTo: 'container',
                     type: 'bar',
+                    height: 700,
                 },
                 title: {
                     text: 'Popularidad relativa de personajes de series',

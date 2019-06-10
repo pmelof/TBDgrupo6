@@ -12,18 +12,20 @@
               Seleccione uno o
               <br>más actores
             </h5>
-            <div id="demo">
-              <div v-for="actor in chartOptions.xAxis.categories" :key="actor.id">
-                <el-checkbox :value="actor" :id="actor" v-model="checked">{{actor}}</el-checkbox>
-              </div>
-              {{ checked }}
-            </div>
+            <label class="container">
+              <input type="checkbox" checked="checked">
+              <span class="checkmark"></span> Peter Dinklage
+            </label>
+            <label class="container">
+              <input type="checkbox" checked="checked">
+              <span class="checkmark"></span> Emilia Clarke
+            </label>
+            <label class="container">
+              <input type="checkbox" checked="checked">
+              <span class="checkmark"></span> Bryan Cranston
+            </label>
             <br>
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              v-on:click="filterByActores()"
-              >Filtrar</el-button>
+            <label class="button">Filtrar</label>
           </el-card>
         </el-col>
         <el-col :span="18">
@@ -42,11 +44,10 @@ export default {
     data() {
         return {
             actores: [],
-            actoresFiltrados: [],
             chartOptions: {
                 series: [
                     {
-                        name: 'Popularidad',
+                        name: 'Popularidad relativa',
                         data: [],
                         color: '#2f7ed8',
                     },
@@ -54,6 +55,7 @@ export default {
                 chart: {
                     renderTo: 'container',
                     type: 'bar',
+                    height: 700,
                 },
                 title: {
                     text: 'Popularidad relativa de actores de series',
@@ -71,7 +73,7 @@ export default {
                     min: 0,
                     title: {
                         text:
-                            'Popularidad relativa',
+                            'Popularidad relativa (calculada en base al número de tuits)',
                         align: 'high',
                     },
                     labels: {
@@ -104,64 +106,27 @@ export default {
             },
         }
     },
-    computed: {
-    },
+    computed: {},
     methods: {
         getActores() {
             axios.get('http://localhost:8080/actores').then(response => {
                 this.actores = response.data
                 for (var actor of this.actores) {
                     if (actor.estadisticaTweetActor != null) {
-                        this.chartOptions.xAxis.categories.push (
-                            actor.nombre
-                        )
-                        this.chartOptions.series[0].data.push (
+                        this.chartOptions.xAxis.categories.push(actor.nombre)
+                        this.chartOptions.series[0].data.push(
                             actor.estadisticaTweetActor.nroTweets
                         )
                     }
                     // console.log(actor.nombre)
                 }
                 // console.log(this.chartOptions.series[0].data)
-            });
-
-            for (var actor of this.actores) {
-                this.actoresFiltrados.push(actor)
-            }
-            
-        },
-        filterByActores() {
-            this.actoresFiltrados.length = 0
-
-            //for (var actor of actoresFiltrados) {
-            //    var data_filter = this.actores.filter( element => element.nombre ==actor)
-            //}
-
-            this.actoresFiltrados.push(this.actores[0])
-
-            var categorias = []
-            var data = []
-
-            for (var actor of this.actoresFiltrados) {
-                categorias.push(actor.nombre)
-            }
-
-            for (var actor of this.actoresFiltrados) {
-                data.push(actor.estadisticaTweetActor.nroTweets)
-            }
-
-            this.chartOptions.series.setData(data, false, false)
-
-            this.chartOptions.xAxis.setOptions({xAxis: {categories: categorias}})
-
-            this.chartOptions.redraw()
-
-            // console.log(actor.nombre)
-            // console.log(this.chartOptions.series[0].data)
+            })
         },
     },
     created() {
         this.getActores()
-    }
+    },
 }
 </script>
 
