@@ -114,7 +114,9 @@ export default {
                 for (var personaje of this.personajes) {
                     if (personaje.estadisticaTweetPersonaje != null) {
                         this.chartOptions.xAxis.categories.push(
-                            personaje.nombre
+                            personaje.nombre.concat(
+                                ' | ' + personaje.serie.nombre
+                            )
                         )
                         this.chartOptions.series[0].data.push(
                             personaje.estadisticaTweetPersonaje.nroTweets
