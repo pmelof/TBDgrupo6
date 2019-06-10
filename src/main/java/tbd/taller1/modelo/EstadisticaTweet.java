@@ -10,16 +10,17 @@ public class EstadisticaTweet {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="ID_estadistica_tweet", unique=true, nullable=false)
+    @Column(name="ID_estadistica_tweet", unique=true)
     private int estadisticaTweetId;
-    @Column (name="nro_tweets", nullable=false)
+    @Column (name="nro_tweets")
     private int nroTweets;
-    @Column (name="nro_tweets_positivos", nullable=false)
+    @Column (name="nro_tweets_positivos")
     private int nroTweetsPositivos;
-    @Column (name="nro_tweets_negativos", nullable=false)
+    @Column (name="nro_tweets_negativos")
     private int nroTweetsNegativos;
-    @Column (name="nro_tweets_neutros", nullable=false)
+    @Column (name="nro_tweets_neutros")
     private int nroTweetsNeutros;
+
 
     @OneToOne(mappedBy = "estadisticaTweetSerie")
     @JsonIgnore
@@ -32,6 +33,18 @@ public class EstadisticaTweet {
     @OneToOne(mappedBy = "estadisticaTweetActor")
     @JsonIgnore
     private Actor actor;
+
+    public EstadisticaTweet(){}
+
+    public EstadisticaTweet(int nroTweets, int nroTweetsPositivos, int nroTweetsNegativos, int nroTweetsNeutros, Serie serie, Personaje personaje, Actor actor) {
+        this.nroTweets = nroTweets;
+        this.nroTweetsPositivos = nroTweetsPositivos;
+        this.nroTweetsNegativos = nroTweetsNegativos;
+        this.nroTweetsNeutros = nroTweetsNeutros;
+        this.serie = serie;
+        this.personaje = personaje;
+        this.actor = actor;
+    }
 
     public int getEstadisticaTweetId() {
         return estadisticaTweetId;

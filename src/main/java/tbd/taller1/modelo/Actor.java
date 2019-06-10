@@ -18,7 +18,7 @@ public class Actor implements Serializable {
     @Column (name="nombre", nullable=false, length=45)
     private String nombre;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "ID_estadistica_tweet")
     private EstadisticaTweet estadisticaTweetActor;
 
