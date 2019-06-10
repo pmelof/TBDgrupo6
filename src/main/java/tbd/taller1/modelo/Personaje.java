@@ -20,7 +20,6 @@ public class Personaje {
 
     @ManyToOne
     @JoinColumn(name = "ID_actor")
-    @JsonIgnore
     private Actor actor;
 
     @OneToOne
