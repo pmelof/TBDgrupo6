@@ -12,20 +12,18 @@
               Seleccione uno o
               <br>más actores
             </h5>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Peter Dinklage
-            </label>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Emilia Clarke
-            </label>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Bryan Cranston
-            </label>
+            <div id="demo">
+              <div v-for="actor in chartOptions.xAxis.categories" :key="actor.id">
+                <el-checkbox :value="actor" :id="actor" v-model="checked">{{actor}}</el-checkbox>
+              </div>
+              {{ checked }}
+            </div>
             <br>
-            <label class="button">Filtrar</label>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              v-on:click="filterByActores()"
+              >Filtrar</el-button>
           </el-card>
         </el-col>
         <el-col :span="18">
@@ -44,10 +42,11 @@ export default {
     data() {
         return {
             actores: [],
+            actoresFiltrados: [],
             chartOptions: {
                 series: [
                     {
-                        name: 'Popularidad relativa',
+                        name: 'Popularidad',
                         data: [],
                         color: '#2f7ed8',
                     },
@@ -72,7 +71,7 @@ export default {
                     min: 0,
                     title: {
                         text:
-                            'Popularidad relativa (calculada en base al número de tuits)',
+                            'Popularidad relativa',
                         align: 'high',
                     },
                     labels: {
@@ -124,6 +123,40 @@ export default {
                 }
                 // console.log(this.chartOptions.series[0].data)
             });
+
+            for (var actor of this.actores) {
+                this.actoresFiltrados.push(actor)
+            }
+            
+        },
+        filterByActores() {
+            this.actoresFiltrados.length = 0
+
+            //for (var actor of actoresFiltrados) {
+            //    var data_filter = this.actores.filter( element => element.nombre ==actor)
+            //}
+
+            this.actoresFiltrados.push(this.actores[0])
+
+            var categorias = []
+            var data = []
+
+            for (var actor of this.actoresFiltrados) {
+                categorias.push(actor.nombre)
+            }
+
+            for (var actor of this.actoresFiltrados) {
+                data.push(actor.estadisticaTweetActor.nroTweets)
+            }
+
+            this.chartOptions.series.setData(data, false, false)
+
+            this.chartOptions.xAxis.setOptions({xAxis: {categories: categorias}})
+
+            this.chartOptions.redraw()
+
+            // console.log(actor.nombre)
+            // console.log(this.chartOptions.series[0].data)
         },
     },
     created() {
