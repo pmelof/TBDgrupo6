@@ -30,8 +30,8 @@ public class SerieServicio {
     public  Serie findOne(@PathVariable("id") Integer id) { return this.serieRepository.findSerieBySerieId(id);
     }
 
-    /*
-    @RequestMapping(value = "/{id}/estadisticaSerie",method = RequestMethod.GET)
+
+    /*@RequestMapping(value = "/{id}/estadisticaSerie",method = RequestMethod.GET)
     @ResponseBody
     public Serie obtenerEstadisticaSerie(@PathVariable("id") Integer id) {
         Serie serie = serieRepository.findSerieBySerieId(id);

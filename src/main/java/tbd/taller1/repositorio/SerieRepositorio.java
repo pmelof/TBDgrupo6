@@ -5,4 +5,6 @@ import tbd.taller1.modelo.Serie;
 
 public interface SerieRepositorio extends PagingAndSortingRepository<Serie, Integer> {
     Serie findSerieBySerieId(Integer id);
+    Serie removeSerieBySerieId(Integer id);
+    Serie deleteSerieBySerieId(Integer id);
 }

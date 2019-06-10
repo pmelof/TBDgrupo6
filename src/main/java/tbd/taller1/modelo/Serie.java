@@ -32,7 +32,7 @@ public class Serie {
     @JsonIgnore
     List<Genero> generos;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "ID_estadistica_tweet")
     private EstadisticaTweet estadisticaTweetSerie;
 

@@ -16,6 +16,8 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.sql.Types.NULL;
+
 @RestController
 @RequestMapping("/estadisticaTweets")
 @CrossOrigin(origins = "*")
@@ -52,20 +54,24 @@ public class EstadisticaTweetServicio {
     @PostConstruct
     public void SeederSqlStats(){
 
-
         // ########################################## BLOque de Codigo Seeder Series ####################################
 
-        Iterable<Serie> series = new ArrayList<Serie>();
-        series = this.serieRepositorio.findAll();
-
-
-        int positivos=0;
-        int neutros = 0;
-        int negativos=0;
+        Iterable<Serie> series = this.serieRepositorio.findAll();
 
         System.out.println("########################## Series #############################\n");
 
+
+        int id=1;
+
+        int positivos;
+        int neutros;
+        int negativos;
+
         for(Serie serie:series){
+
+            positivos=0;
+            neutros = 0;
+            negativos=0;
 
             List<Tweet> tweets_series = this.tweetRepository.findAllByTextContaining(serie.getNombre());
 
@@ -82,20 +88,30 @@ public class EstadisticaTweetServicio {
                 }
             }
             System.out.println(serie.getNombre()+": "+ positivos+","+neutros+","+negativos);
-        }
 
+            EstadisticaTweet estadisticaTweet = new EstadisticaTweet();
+
+            estadisticaTweet.setNroTweets(positivos+negativos+neutros);
+            estadisticaTweet.setNroTweetsPositivos(positivos);
+            estadisticaTweet.setNroTweetsNeutros(neutros);
+            estadisticaTweet.setNroTweetsNegativos(negativos);
+
+
+            serie.setEstadisticaTweetSerie(estadisticaTweet);
+            serieRepositorio.save(serie);
+        }
 
         // ########################################## BLOque de Codigo Seeder Actores ####################################
 
-        Iterable<Actor> actores = new ArrayList<Actor>();
-        actores = this.actorRepositorio.findAll();
+        Iterable<Actor> actores = this.actorRepositorio.findAll();
 
-        positivos=0;
-        neutros = 0;
-        negativos=0;
 
         System.out.println("########################## Actores #############################\n");
         for (Actor actor:actores) {
+
+            positivos=0;
+            neutros = 0;
+            negativos=0;
 
             List<Tweet> tweets_actores = this.tweetRepository.findAllByTextContaining(actor.getNombre());
 
@@ -112,20 +128,30 @@ public class EstadisticaTweetServicio {
                 }
             }
             System.out.println(actor.getNombre()+": "+ positivos+","+neutros+","+negativos);
+
+            EstadisticaTweet estadisticaTweet = new EstadisticaTweet();
+
+            estadisticaTweet.setNroTweets(positivos+negativos+neutros);
+            estadisticaTweet.setNroTweetsPositivos(positivos);
+            estadisticaTweet.setNroTweetsNeutros(neutros);
+            estadisticaTweet.setNroTweetsNegativos(negativos);
+
+            actor.setEstadisticaTweetActor(estadisticaTweet);
+            actorRepositorio.save(actor);
         }
 
         // ########################################## BLOque de Codigo Seeder Personajes ####################################
 
-        Iterable<Personaje> personajes = new ArrayList<Personaje>();
-        personajes = this.personajeRepositorio.findAll();
+        Iterable<Personaje> personajes = this.personajeRepositorio.findAll();
 
-        positivos=0;
-        neutros = 0;
-        negativos=0;
+
 
         System.out.println("########################## Personajes #############################\n");
 
         for (Personaje personaje:personajes) {
+            positivos=0;
+            neutros = 0;
+            negativos=0;
 
             List<Tweet> tweets_personajes = this.tweetRepository.findAllByTextContaining(personaje.getNombre());
 
@@ -142,6 +168,16 @@ public class EstadisticaTweetServicio {
                 }
             }
             System.out.println(personaje.getNombre()+": "+ positivos+","+neutros+","+negativos);
+
+            EstadisticaTweet estadisticaTweet = new EstadisticaTweet();
+
+            estadisticaTweet.setNroTweets(positivos+negativos+neutros);
+            estadisticaTweet.setNroTweetsPositivos(positivos);
+            estadisticaTweet.setNroTweetsNeutros(neutros);
+            estadisticaTweet.setNroTweetsNegativos(negativos);
+
+            personaje.setEstadisticaTweetPersonaje(estadisticaTweet);
+            personajeRepositorio.save(personaje);
         }
     }
 

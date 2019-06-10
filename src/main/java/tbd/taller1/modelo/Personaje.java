@@ -22,7 +22,7 @@ public class Personaje {
     @JoinColumn(name = "ID_actor")
     private Actor actor;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "ID_estadistica_tweet")
     private EstadisticaTweet estadisticaTweetPersonaje;
 
