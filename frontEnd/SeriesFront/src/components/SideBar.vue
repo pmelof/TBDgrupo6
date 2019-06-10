@@ -2,7 +2,7 @@
   <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
     <div class="logoSpace">
       <router-link to="/">
-        <img src="@/assets/logoSeries.svg" id="logo" alt="logo">
+        <img src="@/assets/Logo series.png" id="logo" alt="logo">
       </router-link>
     </div>
     <el-divider></el-divider>
@@ -12,13 +12,13 @@
         <span>Percepción</span>
       </template>
       <router-link to="/percepcionSerie" style="text-decoration:none">
-        <el-menu-item index="1-1">Percepción de Serie</el-menu-item>
+        <el-menu-item index="1-1">Percepción de serie</el-menu-item>
       </router-link>
       <router-link to="/popularidadActor" style="text-decoration:none">
-        <el-menu-item index="1-2">Popularidad de Actores</el-menu-item>
+        <el-menu-item index="1-2">Popularidad de actores</el-menu-item>
       </router-link>
       <router-link to="/popularidadPersonaje" style="text-decoration:none">
-        <el-menu-item index="1-2">Popularidad Personaje</el-menu-item>
+        <el-menu-item index="1-2">Popularidad de personajes</el-menu-item>
       </router-link>
     </el-submenu>
     <el-submenu index="2">
@@ -82,7 +82,7 @@ export default {
     margin-top: 15px;
 }
 #logo {
-    height: 80px;
+    height: 75px;
 }
 .el-divider {
     display: inline-block;

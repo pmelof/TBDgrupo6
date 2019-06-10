@@ -1,14 +1,25 @@
 package tbd.taller1.elasticsearch;
 import org.apache.http.HttpHost;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @Configuration
+@EnableElasticsearchRepositories
 public class ElasticSearchConfiguration{
 
     private static final Logger LOG = LoggerFactory.getLogger(ElasticSearchConfiguration.class);
@@ -17,6 +28,11 @@ public class ElasticSearchConfiguration{
     @Value("${spring.data.elasticsearch.cluster-name}")
     private String clusterName;
     private RestHighLevelClient restHighLevelClient;
+    @Value(value = "${elasticsearch.host}")
+    private String host;
+
+    @Value(value = "${elasticsearch.port}")
+    private int port;
 
     @Bean
     public RestHighLevelClient buildClient() {
@@ -30,4 +46,5 @@ public class ElasticSearchConfiguration{
         }
         return restHighLevelClient;
     }
+
 }
