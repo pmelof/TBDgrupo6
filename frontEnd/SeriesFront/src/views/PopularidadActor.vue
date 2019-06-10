@@ -5,7 +5,7 @@
     </el-header>
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-card class="box-card">
             <h3>Filtro</h3>
             <h5>
@@ -27,8 +27,8 @@
             <br>
             <label class="button">Filtrar</label>
           </el-card>
-        </el-col>
-        <el-col :span="18">
+        </el-col>-->
+        <el-col :span="24">
           <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
