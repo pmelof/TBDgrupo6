@@ -5,7 +5,7 @@
     </el-header>
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-card class="box-card">
             <h3>Filtro</h3>
             <h5>
@@ -27,9 +27,10 @@
             <br>
             <label class="button">Filtrar</label>
           </el-card>
-        </el-col>
-        <el-col :span="18">
+        </el-col>-->
+        <el-col :span="24">
           <el-card class="box-card">
+            <!-- <div class="prueba" v-for="character in personajes" :key="character">{{character}}</div> -->
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
         </el-col>
@@ -39,20 +40,22 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data() {
         return {
             chartOptions: {
                 series: [
                     {
-                        name: 'Popularidad relativa',
-                        data: [814, 841, 3714],
+                        name: 'Popularidad',
+                        data: [],
                         color: '#2f7ed8',
                     },
                 ],
                 chart: {
                     renderTo: 'container',
                     type: 'bar',
+                    height: 650,
                 },
                 title: {
                     text: 'Popularidad relativa de personajes de series',
@@ -61,11 +64,7 @@ export default {
                     text: '(estadísticas obtenidas de la red social Twitter)',
                 },
                 xAxis: {
-                    categories: [
-                        'Cersei Lannister, de Game of Thrones',
-                        'Rick Grimes, de The Walking Dead',
-                        'Walter White, de Breaking Bad',
-                    ],
+                    categories: [],
                     title: {
                         text: null,
                     },
@@ -105,7 +104,30 @@ export default {
                     shadow: true,
                 },
             },
+            personajes: [],
         }
+    },
+    methods: {
+        getCharacters() {
+            axios.get('http://localhost:8080/personajes').then(response => {
+                this.personajes = response.data
+                for (var personaje of this.personajes) {
+                    if (personaje.estadisticaTweetPersonaje != null) {
+                        this.chartOptions.xAxis.categories.push(
+                            personaje.nombre
+                        )
+                        this.chartOptions.series[0].data.push(
+                            personaje.estadisticaTweetPersonaje.nroTweets
+                        )
+                    }
+                    // console.log(personaje.nombre)
+                }
+                // console.log(this.chartOptions.series[0].data)
+            })
+        },
+    },
+    created() {
+        this.getCharacters()
     },
 }
 </script>

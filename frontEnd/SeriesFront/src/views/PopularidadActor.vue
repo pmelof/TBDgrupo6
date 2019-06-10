@@ -5,7 +5,7 @@
     </el-header>
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-card class="box-card">
             <h3>Filtro</h3>
             <h5>
@@ -27,8 +27,8 @@
             <br>
             <label class="button">Filtrar</label>
           </el-card>
-        </el-col>
-        <el-col :span="18">
+        </el-col>-->
+        <el-col :span="24">
           <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
@@ -39,20 +39,23 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data() {
         return {
+            actores: [],
             chartOptions: {
                 series: [
                     {
                         name: 'Popularidad relativa',
-                        data: [133, 156, 947],
+                        data: [],
                         color: '#2f7ed8',
                     },
                 ],
                 chart: {
                     renderTo: 'container',
                     type: 'bar',
+                    height: 650,
                 },
                 title: {
                     text: 'Popularidad relativa de actores de series',
@@ -61,11 +64,7 @@ export default {
                     text: '(estadísticas obtenidas de la red social Twitter)',
                 },
                 xAxis: {
-                    categories: [
-                        'Peter Dinklage, de Game of Thrones',
-                        'Emilia Clarke, de Game of Thrones',
-                        'Bryan Cranston, de Breaking Bad',
-                    ],
+                    categories: [],
                     title: {
                         text: null,
                     },
@@ -106,6 +105,27 @@ export default {
                 },
             },
         }
+    },
+    computed: {},
+    methods: {
+        getActores() {
+            axios.get('http://localhost:8080/actores').then(response => {
+                this.actores = response.data
+                for (var actor of this.actores) {
+                    if (actor.estadisticaTweetActor != null) {
+                        this.chartOptions.xAxis.categories.push(actor.nombre)
+                        this.chartOptions.series[0].data.push(
+                            actor.estadisticaTweetActor.nroTweets
+                        )
+                    }
+                    // console.log(actor.nombre)
+                }
+                // console.log(this.chartOptions.series[0].data)
+            })
+        },
+    },
+    created() {
+        this.getActores()
     },
 }
 </script>

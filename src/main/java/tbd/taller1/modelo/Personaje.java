@@ -16,12 +16,10 @@ public class Personaje {
 
     @ManyToOne
     @JoinColumn(name="ID_serie")
-    @JsonIgnore
     private Serie serie;
 
     @ManyToOne
     @JoinColumn(name = "ID_actor")
-    @JsonIgnore
     private Actor actor;
 
     @OneToOne(cascade=CascadeType.ALL)
