@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data() {
         return {
@@ -46,18 +47,18 @@ export default {
                 series: [
                     {
                         name: 'Positiva',
-                        data: [107, 31, 635, 203, 2],
-                        color: 'green',
+                        data: [],
+                        color: '#56FF84',
                     },
                     {
                         name: 'Neutra',
-                        data: [133, 156, 947, 408, 6],
-                        color: 'grey',
+                        data: [],
+                        color: '#FFEA9E',
                     },
                     {
                         name: 'Negativa',
-                        data: [814, 841, 3714, 727, 31],
-                        color: 'purple',
+                        data: [],
+                        color: '#FF9291',
                     },
                 ],
                 chart: {
@@ -71,13 +72,7 @@ export default {
                     text: '(estadísticas obtenidas de la red social Twitter)',
                 },
                 xAxis: {
-                    categories: [
-                        'Game of Thrones',
-                        'Breaking Bad',
-                        'Chernobyl',
-                        'BoJack Horseman',
-                        'The Walking Dead',
-                    ],
+                    categories: [],
                     title: {
                         text: null,
                     },
@@ -116,7 +111,33 @@ export default {
                     shadow: true,
                 },
             },
+            seriesInfo: [],
         }
+    },
+    methods: {
+        getSerie() {
+            axios.get('http://localhost:8080/series').then(response => {
+                this.seriesInfo = response.data
+                for (var serie of this.seriesInfo) {
+                    if (serie.estadisticaTweetSerie != null) {
+                        this.chartOptions.xAxis.categories.push(serie.nombre)
+                        // console.log(serie.nombre)
+                        this.chartOptions.series[0].data.push(
+                            serie.estadisticaTweetSerie.nroTweetsPositivos
+                        )
+                        this.chartOptions.series[1].data.push(
+                            serie.estadisticaTweetSerie.nroTweetsNeutros
+                        )
+                        this.chartOptions.series[2].data.push(
+                            serie.estadisticaTweetSerie.nroTweetsNegativos
+                        )
+                    }
+                }
+            })
+        },
+    },
+    created() {
+        this.getSerie()
     },
 }
 </script>
