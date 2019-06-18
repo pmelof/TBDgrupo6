@@ -5,7 +5,6 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +18,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @Configuration
-@EnableElasticsearchRepositories
 public class ElasticSearchConfiguration{
 
     private static final Logger LOG = LoggerFactory.getLogger(ElasticSearchConfiguration.class);

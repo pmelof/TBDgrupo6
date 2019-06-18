@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
@@ -15,6 +16,7 @@ import twitter4j.conf.ConfigurationBuilder;
 @Configuration
 @ConditionalOnClass({TwitterStreamFactory.class, TwitterStream.class, TwitterListener.class})
 @EnableConfigurationProperties(TwitterProperties.class)
+@EnableElasticsearchRepositories("tbd.taller1.elasticsearch")
 public class TwitterConfiguration {
 
     @Autowired

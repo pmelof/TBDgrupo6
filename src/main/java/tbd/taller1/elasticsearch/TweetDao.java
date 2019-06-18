@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Repository
+
 public class TweetDao {
 	private final String INDEX = "tbd";
 	private final String TYPE = "tweets";

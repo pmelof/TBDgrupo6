@@ -1,9 +1,14 @@
 package tbd.taller1.elasticsearch;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.Map;
 
-public interface ElasticsearchTweetRepository extends CrudRepository<Tweet, String> {
-    Tweet findByText(String text);
+@Repository
+public interface ElasticsearchTweetRepository extends ElasticsearchRepository<Tweet, String> {
+    Map<String,Object> getTweetById(String id);
+    Tweet findTweetById(String id);
+
 }
 

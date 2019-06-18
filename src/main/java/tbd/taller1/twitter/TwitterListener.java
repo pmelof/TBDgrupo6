@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import tbd.taller1.elasticsearch.ElasticsearchTweetRepository;
@@ -20,6 +21,7 @@ import java.util.Scanner;
 
 @Service
 @Configurable
+@EnableElasticsearchRepositories
 public class TwitterListener {
     @Autowired
     private ResourceLoader resourceLoader;
@@ -29,8 +31,10 @@ public class TwitterListener {
     private MongoTemplate mongo;
     @Autowired
     private TweetRepository tweetRepository;
+    //@Autowired
+    //private TweetDao tweetDao;
     @Autowired
-    private TweetDao tweetDao;
+    private ElasticsearchTweetRepository elasticsearchTweetRepository;
 
     @PostConstruct
     public void run() {
@@ -40,7 +44,8 @@ public class TwitterListener {
                     Tweet tweet = new Tweet(status);
                     tbd.taller1.elasticsearch.Tweet elasticTweet = new tbd.taller1.elasticsearch.Tweet(status);
                     System.out.println(tweetRepository.save(tweet));
-                    System.out.println(tweetDao.insertTweet(elasticTweet));
+                    //System.out.println(tweetDao.insertTweet(elasticTweet));
+                    System.out.println(elasticsearchTweetRepository.save(elasticTweet));
 
                 }
             }
