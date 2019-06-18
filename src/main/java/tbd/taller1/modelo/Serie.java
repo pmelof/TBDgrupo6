@@ -25,6 +25,8 @@ public class Serie {
     private  String sinopsis;
     @Column (name="emisor", nullable=false, length=45)
     private String emisor;  //nombre emisor.
+    @Column (name="imagen", nullable=false, length=2024)
+    private String imagen;  //URL imagen de la serie.
 
     @ManyToMany
     @JoinTable(name = "genero_serie", joinColumns = @JoinColumn(name = "ID_serie"), inverseJoinColumns = @JoinColumn(name = "ID_genero"))
@@ -86,6 +88,14 @@ public class Serie {
 
     public void setEmisor(String emisor) {
         this.emisor = emisor;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public List<Genero> getGeneros() {
