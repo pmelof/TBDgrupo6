@@ -109,18 +109,22 @@ export default {
     computed: {},
     methods: {
         getActores() {
-            axios.get('http://localhost:8080/actores').then(response => {
+            axios.get('http://localhost:8080/personajes').then(response => {
                 this.actores = response.data
-                for (var actor of this.actores) {
-                    if (actor.estadisticaTweetActor != null) {
-                        this.chartOptions.xAxis.categories.push(actor.nombre)
-                        this.chartOptions.series[0].data.push(
-                            actor.estadisticaTweetActor.nroTweets
-                        )
+                for (var personaje of this.actores) {
+                    if (personaje.actor.estadisticaTweetActor != null) {
+                        if (personaje.actor.estadisticaTweetActor.nroTweets > 0) {
+                            this.chartOptions.xAxis.categories.push(
+                                personaje.actor.nombre.concat(
+                                    ' | ' + personaje.serie.nombre
+                                )
+                            )
+                            this.chartOptions.series[0].data.push(
+                                personaje.actor.estadisticaTweetActor.nroTweets
+                            )
+                        }
                     }
-                    // console.log(actor.nombre)
                 }
-                // console.log(this.chartOptions.series[0].data)
             })
         },
     },
