@@ -1,13 +1,17 @@
 package tbd.taller1.servicio;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.web.bind.annotation.*;
 import tbd.taller1.analizadorsentimental.ServicioAnalizadorSentimental;
+import tbd.taller1.elasticsearch.ElasticsearchTweetRepository;
+import tbd.taller1.elasticsearch.Tweet;
 import tbd.taller1.modelo.Actor;
 import tbd.taller1.modelo.EstadisticaTweet;
 import tbd.taller1.modelo.Personaje;
 import tbd.taller1.modelo.Serie;
-import tbd.taller1.mongo.Tweet;
 import tbd.taller1.mongo.TweetRepository;
 import tbd.taller1.mongo.TweetService;
 import tbd.taller1.repositorio.*;
@@ -17,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.sql.Types.NULL;
+import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 
 @RestController
 @RequestMapping("/estadisticaTweets")
@@ -33,6 +38,8 @@ public class EstadisticaTweetServicio {
     private ActorRepositorio actorRepositorio;
     @Autowired
     private PersonajeRepositorio personajeRepositorio;
+    @Autowired
+    private ElasticsearchTweetRepository elasticsearchTweetRepository;
 
     @Autowired
     TweetService tweetService;
@@ -73,9 +80,15 @@ public class EstadisticaTweetServicio {
             neutros = 0;
             negativos=0;
 
-            List<Tweet> tweets_series = this.tweetRepository.findAllByTextContaining(serie.getNombre());
 
-            for (Tweet tweet:tweets_series) {
+            List<tbd.taller1.elasticsearch.Tweet> tweets_series = new ArrayList<>();
+            for(String termino:serie.getNombre().split(" ")){
+                 tweets_series.addAll(this.elasticsearchTweetRepository.findTweetsByTextContaining(termino));
+            }
+
+
+
+            for (tbd.taller1.elasticsearch.Tweet tweet:tweets_series) {
 
                 int valor = servicioAnalizadorSentimental.classify(tweet.getText());
 
@@ -113,9 +126,13 @@ public class EstadisticaTweetServicio {
             neutros = 0;
             negativos=0;
 
-            List<Tweet> tweets_actores = this.tweetRepository.findAllByTextContaining(actor.getNombre());
+            List<tbd.taller1.elasticsearch.Tweet> tweets_actores = new ArrayList<>();
+            for(String termino:actor.getNombre().split(" ")){
+                 tweets_actores.addAll(this.elasticsearchTweetRepository.findAllByTextContaining(termino));
+            }
 
-            for (Tweet tweet:tweets_actores) {
+
+            for (tbd.taller1.elasticsearch.Tweet tweet:tweets_actores) {
 
                 int valor = servicioAnalizadorSentimental.classify(tweet.getText());
 
@@ -153,7 +170,11 @@ public class EstadisticaTweetServicio {
             neutros = 0;
             negativos=0;
 
-            List<Tweet> tweets_personajes = this.tweetRepository.findAllByTextContaining(personaje.getNombre());
+            List<tbd.taller1.elasticsearch.Tweet> tweets_personajes = new ArrayList<>();
+            for(String termino:personaje.getNombre().split(" ")){
+                 tweets_personajes.addAll(this.elasticsearchTweetRepository.findAllByTextContaining(termino));
+            }
+
 
             for (Tweet tweet:tweets_personajes) {
 
