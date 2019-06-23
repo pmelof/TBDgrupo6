@@ -98,10 +98,13 @@ public class Neo4jServicio {
     @RequestMapping(value = "/top={rank}", method = RequestMethod.GET)
     public void topUsuarios (@PathVariable("rank") Integer rank){
 
+        Driver driver = GraphDatabase.driver( "bolt://localhost", AuthTokens.basic( "neo4j", "1234" ) );
+        Session session = driver.session();
+
+        //session.run();
 
 
 
-        
 
 
 
