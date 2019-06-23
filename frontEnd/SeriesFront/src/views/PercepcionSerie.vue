@@ -8,23 +8,29 @@
         <el-col :span="6">
           <el-card class="box-card">
             <h3>Filtro</h3>
-            <InfoSeries></InfoSeries>
             <h5>
               Seleccione una o
               <br>más series
             </h5>
-            <div id="demo">
-              <div v-for="serie in chartOptions.xAxis.categories" :key="serie.id">
-                <el-checkbox :value="serie" :id="serie" v-model="checked">{{serie}}</el-checkbox>
-              </div>
-              {{ checked }}
+            <div id="checkbox">
+                <el-checkbox-group v-model="checkList" @change="handleFilterChange">
+                  <el-checkbox v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
+                    <InfoSeries :nombreSerie="serie.nombre">{{serie.nombre}}</InfoSeries>
+                  </el-checkbox>
+                </el-checkbox-group>
             </div>
             <br>
             <el-button
               type="primary"
               icon="el-icon-search"
-              v-on:click=""
+              v-on:click="updateChart"
               >Filtrar</el-button>
+            <br>
+            <br>
+            <el-button
+              type="primary"
+              v-on:click="removeFilter"
+              >Quitar filtro</el-button>
           </el-card>
         </el-col>
         <el-col :span="18">
@@ -116,18 +122,23 @@ export default {
                 },
             },
             seriesInfo: [],
-            checked: "",
+            checkList: []
         }
     },
     methods: {
-        getSerie() {
+        getSeries() {
+            this.chartOptions.xAxis.categories.length = 0
+            this.chartOptions.series[0].data.length = 0
+            this.chartOptions.series[1].data.length = 0
+            this.chartOptions.series[2].data.length = 0
+
             axios.get('http://localhost:8080/series').then(response => {
                 this.seriesInfo = response.data
                 this.seriesInfo.sort(this.compare)
 
                 for (var serie of this.seriesInfo) {
+                    this.chartOptions.xAxis.categories.push(serie.nombre)
                     if (serie.estadisticaTweetSerie != null) {
-                        this.chartOptions.xAxis.categories.push(serie.nombre)
                         this.chartOptions.series[0].data.push(
                             serie.estadisticaTweetSerie.nroTweetsPositivos
                         )
@@ -137,7 +148,13 @@ export default {
                         this.chartOptions.series[2].data.push(
                             serie.estadisticaTweetSerie.nroTweetsNegativos
                         )
+                    } else {
+                        this.chartOptions.series[0].data.push(0)
+                        this.chartOptions.series[1].data.push(0)
+                        this.chartOptions.series[2].data.push(0)
                     }
+
+                    this.checkList.push(serie.nombre)
                 }
             })
         },
@@ -156,10 +173,62 @@ export default {
                 return 1
             }
             return 0
-        }
+        },
+
+        updateChart() {
+            this.chartOptions.xAxis.categories.length = 0
+            this.chartOptions.series[0].data.length = 0
+            this.chartOptions.series[1].data.length = 0
+            this.chartOptions.series[2].data.length = 0
+
+            for (var serie of this.seriesInfo) {
+                var poner = false
+
+                for (var nombreSerie of this.checkList) {
+                    if (nombreSerie == serie.nombre) {
+                        poner = true
+                        break
+                    }
+                }
+
+                if (poner == true) {
+                    this.chartOptions.xAxis.categories.push(serie.nombre)
+                    if (serie.estadisticaTweetSerie != null) {
+                        this.chartOptions.series[0].data.push(
+                            serie.estadisticaTweetSerie.nroTweetsPositivos
+                        )
+                        this.chartOptions.series[1].data.push(
+                            serie.estadisticaTweetSerie.nroTweetsNeutros
+                        )
+                        this.chartOptions.series[2].data.push(
+                            serie.estadisticaTweetSerie.nroTweetsNegativos
+                        )
+                    } else {
+                        this.chartOptions.series[0].data.push(0)
+                        this.chartOptions.series[1].data.push(0)
+                        this.chartOptions.series[2].data.push(0)
+                    }
+                }
+            }
+        },
+
+        removeFilter() {
+            this.checkList.length = 0
+            this.getSeries()
+        },
+
+        handleFilterChange(val) {
+            if (this.checkList.length == 0) {
+                this.getSeries()
+            }
+        },
+
+        getInfoSerie() {
+            console.log("hola")
+        },
     },
     created() {
-        this.getSerie()
+        this.getSeries()
     },
 }
 </script>
@@ -245,10 +314,11 @@ export default {
     border: none;
     border-radius: 2px;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 15px;
 }
+
 </style>
