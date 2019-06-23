@@ -20,6 +20,9 @@ public class ServicioAnalizadorSentimental {
     public int classify(@RequestParam(value="text") String text) {
 
         double[] resultSentimentalTweet = this.classifier.classify(text);
+        //System.out.println("Positivo:"+resultSentimentalTweet[1]);
+        //System.out.println("Negativo:"+resultSentimentalTweet[2]);
+
 
         if(resultSentimentalTweet[0] == 1){
 

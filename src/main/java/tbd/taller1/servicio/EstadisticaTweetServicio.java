@@ -62,7 +62,7 @@ public class EstadisticaTweetServicio {
     public  EstadisticaTweet findOne(@PathVariable("id") Integer id) { return this.estadisticaTweetRepository.findEstadisticaTweetsByEstadisticaTweetId(id);
     }
 
-    @PostConstruct
+    //@PostConstruct
     public void SeederSqlStats(){
 
         // ########################################## BLOque de Codigo Seeder Series ####################################

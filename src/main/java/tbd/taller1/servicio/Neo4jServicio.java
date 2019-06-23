@@ -10,15 +10,24 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
 import org.neo4j.driver.v1.TransactionWork;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import tbd.taller1.analizadorsentimental.ServicioAnalizadorSentimental;
 import tbd.taller1.elasticsearch.ElasticsearchTweetRepository;
+import tbd.taller1.elasticsearch.Tweet;
 import tbd.taller1.modelo.Serie;
 import tbd.taller1.repositorio.SerieRepositorio;
 
 import javax.annotation.PostConstruct;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.neo4j.driver.v1.Values.parameters;
 @RestController
+@RequestMapping("/neo4j")
 public class Neo4jServicio {
 
 
@@ -26,11 +35,12 @@ public class Neo4jServicio {
     private SerieRepositorio serieRepositorio;
     @Autowired
     private ElasticsearchTweetRepository elasticsearchTweetRepository;
-
+    @Autowired
+    ServicioAnalizadorSentimental servicioAnalizadorSentimental;
 
 
     @PostConstruct
-    public void Neo4tester() {
+    public void SemilleroBD() {
 
         Driver driver = GraphDatabase.driver( "bolt://localhost", AuthTokens.basic( "neo4j", "1234" ) );
         Session session = driver.session();
@@ -41,95 +51,74 @@ public class Neo4jServicio {
         Iterable<Serie> series = this.serieRepositorio.findAll();
 
         for (Serie serie:series) {
-            session.run("CREATE (s:Serie {name:'"+serie.getNombre()+"',emisor:'"+serie.getEmisor()+"'})");
 
+            // INFO SERIE
+            String nombreSerie = serie.getNombre();
+            String emisorSerie = serie.getEmisor();
 
-            session.run("CREATE (u:User {name:'USUARIOTest',followers:'2000'})");
+            // CREAR NODO SERIE
+            session.run("CREATE (s:Serie {name:'"+nombreSerie+"',emisor:'"+emisorSerie+"'})");
 
-
-            //session.run("CREATE ("+serie.getNombre()+")-[label:Rela_Type {opinion:1, text:1}]-> (u)");
-
-
-
-            session.run("match (s:Serie) where s.name='"+serie.getNombre()+"'"
-                    + "  match (u:User) where u.name='USUARIOTest' "
-                    + "  create (u)-[label:Rela_Type {opinion:'positivo', text:'ME GUSTA GOT'}]->(s)");
-
-            break;
-        }
-
-
-        /*result = session.run( "MATCH (a:Person) return a.name as name, a.title as title");
-        while ( result.hasNext() )
-        {
-            Record record = result.next();
-            System.out.println( record.get( "title" ).asString() + " " + record.get("name").asString() );
-        }*/
-
-
-
-
-        /*session.run("match (a:Person) where a.name='Merlin'"
-                + "match (b:Person) where b.name='Arthur'"
-                + "create (a)-[r:Advise]->(b)");
-
-
-        session.run("create (a:Person {name:'Guinevere',title:'Lady'})");
-
-        session.run("match (a:Person) where a.name='Arthur'"
-                + "match (b:Person) where b.name='Guinevere'"
-                + "create (a)-[r:Married {since:'13 Century'}]->(b)");
-
-        session.run("create (a:Person {name:'Percival',title:'Sir'})");
-        session.run("create (a:Person {name:'Blanchefleur',title:'Lady'})");
-
-        session.run("match (a:Person) where a.name='Percival'"
-                + "match (b:Person) where b.name='Blanchefleur'"
-                + "create (a)-[r:Married]->(b)");
-
-        session.run("match (a:Person) where a.name='Percival'"
-                + "match (b:Person) where b.name='Arthur'"
-                + "create (a)-[r:Loyal]->(b)");
-
-        session.run("match (a:Person) where a.name='Lancelot' "
-                + "  match (b:Person) where b.name='Percival' "
-                + "  create (a)-[r:Fellow]->(b)");*/
-
-        //result = session.run( "MATCH (a:Person) where a.name='Lancelot' match (a)-[r]->(b:Person) return b.name as name, b.title as title");
-        //result = session.run( "MATCH (a:Person) where a.name='Lancelot' match (a)-[r:]->(b:Person) return b.name as name, b.title as title");
-
-        /*while ( result.hasNext() )
-        {
-            Record record = result.next();
-            System.out.println( record.get( "title" ).asString() + " " + record.get("name").asString() );
-            StatementResult result2 = session.run( "MATCH (a:Person) where a.name='"+record.get("name").asString()+"' match(a)-[r]->(b) return b.name as name, b.title as title");
-            while ( result2.hasNext() )
-            {
-                record = result2.next();
-                System.out.println(record.get( "title" ).asString() + " " + record.get("name").asString() );
+            // BUSCAR TWEETS REFERENCIADO A LA SERIE CON ELASTIC SEARCH
+            List<tbd.taller1.elasticsearch.Tweet> tweets_series = new ArrayList<>();
+            for(String termino:serie.getNombre().split(" ")){
+                tweets_series.addAll(this.elasticsearchTweetRepository.findTweetsByTextContaining(termino));
             }
-        }*/
 
-        /*String[] names = new String[2];
-        names[0] = "Galahad";
-        names[1] = "Bors";
+            System.out.println("SERIE:     "+nombreSerie);
 
-        for (String name:names)
-        {
-            session.run("create (a:Person {name:'"+name+"',title:'Sir'})");
-            session.run("match (a:Person) where a.name='Lancelot'"
-                    + "match (b:Person) where b.name='"+name+"'"
-                    + "create (b)-[r:Fellow]->(a)");
-            session.run("match (a:Person) where a.name='Arthur'"
-                    + "match (b:Person) where b.name='"+name+"'"
-                    + "create (b)-[r:Loyal]->(a)");
-        }*/
+            int aux=0;
+            for (Tweet tweet:tweets_series) {
 
+                if(aux==20)break;
+                // INFO USUARIO
+                String usuarioTwitter = tweet.getUserScreenName();  // NOMBRE USUARIO
+                int usuarioFollowers = tweet.getUserFollowersCount();
+                // CREAR NODO USUARIO
+                session.run("CREATE (u:Usuario {name:'"+usuarioTwitter+"',followers:"+usuarioFollowers+"})");
 
+                // INFO TWEET
+                String textTweet = tweet.getText();
+                textTweet = textTweet.replaceAll("'","");
+
+                // ANALISIS SENTIMENTAL AL TWEET DEL USUARIO
+                int opinion = servicioAnalizadorSentimental.classify(textTweet);
+
+                // CREAR RELACION USUARIO-TWITTER
+                session.run("match (s:Serie) where s.name='"+nombreSerie+"'"
+                    + "  match (u:Usuario) where u.name='"+usuarioTwitter+"'"
+                    + "  create (u)-[label:opinion_serie {valorizacion:"+opinion+", text:'"+textTweet+"'}]->(s)");
+                aux++;
+            }
+        }
         session.close();
         driver.close();
+    }
+
+    @RequestMapping(value = "/top={rank}", method = RequestMethod.GET)
+    public void topUsuarios (@PathVariable("rank") Integer rank){
+
+
+
+
+        
+
+
+
+
 
     }
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
