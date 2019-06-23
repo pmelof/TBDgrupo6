@@ -5,30 +5,29 @@
     </el-header>
     <el-main>
       <el-row :gutter="20">
-        <!-- <el-col :span="6">
+        <el-col :span="6">
           <el-card class="box-card">
             <h3>Filtro</h3>
+            <InfoSeries></InfoSeries>
             <h5>
-              Seleccione uno o
+              Seleccione una o
               <br>más series
             </h5>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Game of Thrones
-            </label>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Breaking Bad
-            </label>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Chernobyl
-            </label>
+            <div id="demo">
+              <div v-for="serie in chartOptions.xAxis.categories" :key="serie.id">
+                <el-checkbox :value="serie" :id="serie" v-model="checked">{{serie}}</el-checkbox>
+              </div>
+              {{ checked }}
+            </div>
             <br>
-            <label class="button">Filtrar.</label>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              v-on:click=""
+              >Filtrar</el-button>
           </el-card>
-        </el-col>-->
-        <el-col :span="24">
+        </el-col>
+        <el-col :span="18">
           <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
@@ -40,7 +39,11 @@
 
 <script>
 import axios from 'axios'
+import InfoSeries from '@/components/InfoSeries.vue'
 export default {
+    components: {
+        InfoSeries,
+    },
     data() {
         return {
             chartOptions: {
@@ -113,16 +116,18 @@ export default {
                 },
             },
             seriesInfo: [],
+            checked: "",
         }
     },
     methods: {
         getSerie() {
             axios.get('http://localhost:8080/series').then(response => {
                 this.seriesInfo = response.data
+                this.seriesInfo.sort(this.compare)
+
                 for (var serie of this.seriesInfo) {
                     if (serie.estadisticaTweetSerie != null) {
                         this.chartOptions.xAxis.categories.push(serie.nombre)
-                        // console.log(serie.nombre)
                         this.chartOptions.series[0].data.push(
                             serie.estadisticaTweetSerie.nroTweetsPositivos
                         )
@@ -136,6 +141,22 @@ export default {
                 }
             })
         },
+
+        compare(a, b) {
+            if ((a.estadisticaTweetSerie == null) || (b.estadisticaTweetSerie == null)) {
+                return 1
+            }
+
+            const nroTweetsA = a.estadisticaTweetSerie.nroTweets
+            const nroTweetsB = b.estadisticaTweetSerie.nroTweets
+
+            if (nroTweetsA > nroTweetsB) {
+                return -1
+            } else if (nroTweetsA < nroTweetsB) {
+                return 1
+            }
+            return 0
+        }
     },
     created() {
         this.getSerie()

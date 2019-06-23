@@ -1,5 +1,6 @@
 package tbd.taller1.elasticsearch;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import twitter4j.Status;
@@ -16,23 +17,23 @@ public class Tweet {
     @Id
     private String id;
 
-    private Date createdAt;
-    private LocalDate downloadedAt;
+    private long createdAt;
+    private String downloadedAt;
     private int favoriteCount;
 
-    public Date getCreatedAt() {
+    public long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(long createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getDownloadedAt() {
+    public String getDownloadedAt() {
         return downloadedAt;
     }
 
-    public void setDownloadedAt(LocalDate downloadedAt) {
+    public void setDownloadedAt(String downloadedAt) {
         this.downloadedAt = downloadedAt;
     }
 
@@ -126,7 +127,7 @@ public class Tweet {
     }
 
     public Tweet(Status status){
-        this.createdAt = status.getCreatedAt();
+        this.createdAt = status.getCreatedAt().getTime();
         this.favoriteCount = status.getFavoriteCount();
         this.retweetCount = status.getRetweetCount();
         this.text = status.getText();
@@ -134,7 +135,7 @@ public class Tweet {
         this.userFavoritesCount = status.getUser().getFavouritesCount();
         this.userFollowersCount = status.getUser().getFollowersCount();
         this.userName = status.getUser().getName();
-        this.downloadedAt = LocalDate.now();
+        this.downloadedAt = LocalDate.now().toString();
         if(status.getPlace() == null) {
             this.country = "Unknown";
             this.countryCode = "Unknown";
