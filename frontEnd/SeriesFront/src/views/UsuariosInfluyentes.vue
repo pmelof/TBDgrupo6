@@ -1,39 +1,34 @@
 <template>
   <el-container>
     <el-header>
-      <h1>Percepción de series</h1>
+      <h1>Usuarios más influyentes</h1>
     </el-header>
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-card class="box-card">
             <h3>Filtro</h3>
             <h5>
-              Seleccione una o
+              Seleccione uno o
               <br>más series
             </h5>
-            <div id="checkbox">
-                <el-checkbox-group v-model="checkList" @change="handleFilterChange">
-                  <el-checkbox v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
-                    <InfoSeries :nombreSerie="serie.nombre">{{serie.nombre}}</InfoSeries>
-                  </el-checkbox>
-                </el-checkbox-group>
-            </div>
+            <label class="container">
+              <input type="checkbox" checked="checked">
+              <span class="checkmark"></span> Game of Thrones
+            </label>
+            <label class="container">
+              <input type="checkbox" checked="checked">
+              <span class="checkmark"></span> Breaking Bad
+            </label>
+            <label class="container">
+              <input type="checkbox" checked="checked">
+              <span class="checkmark"></span> Chernobyl
+            </label>
             <br>
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              v-on:click="updateChart"
-              >Filtrar</el-button>
-            <br>
-            <br>
-            <el-button
-              type="primary"
-              v-on:click="removeFilter"
-              >Quitar filtro</el-button>
+            <label class="button">Filtrar.</label>
           </el-card>
-        </el-col>
-        <el-col :span="18">
+        </el-col>-->
+        <el-col :span="24">
           <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
@@ -45,11 +40,7 @@
 
 <script>
 import axios from 'axios'
-import InfoSeries from '@/components/InfoSeries.vue'
 export default {
-    components: {
-        InfoSeries,
-    },
     data() {
         return {
             chartOptions: {
@@ -122,23 +113,16 @@ export default {
                 },
             },
             seriesInfo: [],
-            checkList: []
         }
     },
     methods: {
-        getSeries() {
-            this.chartOptions.xAxis.categories.length = 0
-            this.chartOptions.series[0].data.length = 0
-            this.chartOptions.series[1].data.length = 0
-            this.chartOptions.series[2].data.length = 0
-
+        getSerie() {
             axios.get('http://localhost:8080/series').then(response => {
                 this.seriesInfo = response.data
-                this.seriesInfo.sort(this.compare)
-
                 for (var serie of this.seriesInfo) {
-                    this.chartOptions.xAxis.categories.push(serie.nombre)
                     if (serie.estadisticaTweetSerie != null) {
+                        this.chartOptions.xAxis.categories.push(serie.nombre)
+                        // console.log(serie.nombre)
                         this.chartOptions.series[0].data.push(
                             serie.estadisticaTweetSerie.nroTweetsPositivos
                         )
@@ -148,87 +132,13 @@ export default {
                         this.chartOptions.series[2].data.push(
                             serie.estadisticaTweetSerie.nroTweetsNegativos
                         )
-                    } else {
-                        this.chartOptions.series[0].data.push(0)
-                        this.chartOptions.series[1].data.push(0)
-                        this.chartOptions.series[2].data.push(0)
                     }
-
-                    this.checkList.push(serie.nombre)
                 }
             })
         },
-
-        compare(a, b) {
-            if ((a.estadisticaTweetSerie == null) || (b.estadisticaTweetSerie == null)) {
-                return 1
-            }
-
-            const nroTweetsA = a.estadisticaTweetSerie.nroTweets
-            const nroTweetsB = b.estadisticaTweetSerie.nroTweets
-
-            if (nroTweetsA > nroTweetsB) {
-                return -1
-            } else if (nroTweetsA < nroTweetsB) {
-                return 1
-            }
-            return 0
-        },
-
-        updateChart() {
-            this.chartOptions.xAxis.categories.length = 0
-            this.chartOptions.series[0].data.length = 0
-            this.chartOptions.series[1].data.length = 0
-            this.chartOptions.series[2].data.length = 0
-
-            for (var serie of this.seriesInfo) {
-                var poner = false
-
-                for (var nombreSerie of this.checkList) {
-                    if (nombreSerie == serie.nombre) {
-                        poner = true
-                        break
-                    }
-                }
-
-                if (poner == true) {
-                    this.chartOptions.xAxis.categories.push(serie.nombre)
-                    if (serie.estadisticaTweetSerie != null) {
-                        this.chartOptions.series[0].data.push(
-                            serie.estadisticaTweetSerie.nroTweetsPositivos
-                        )
-                        this.chartOptions.series[1].data.push(
-                            serie.estadisticaTweetSerie.nroTweetsNeutros
-                        )
-                        this.chartOptions.series[2].data.push(
-                            serie.estadisticaTweetSerie.nroTweetsNegativos
-                        )
-                    } else {
-                        this.chartOptions.series[0].data.push(0)
-                        this.chartOptions.series[1].data.push(0)
-                        this.chartOptions.series[2].data.push(0)
-                    }
-                }
-            }
-        },
-
-        removeFilter() {
-            this.checkList.length = 0
-            this.getSeries()
-        },
-
-        handleFilterChange(val) {
-            if (this.checkList.length == 0) {
-                this.getSeries()
-            }
-        },
-
-        getInfoSerie() {
-            console.log("hola")
-        },
     },
     created() {
-        this.getSeries()
+        this.getSerie()
     },
 }
 </script>
@@ -314,11 +224,10 @@ export default {
     border: none;
     border-radius: 2px;
     color: white;
-    padding: 10px 0px;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 15px;
 }
-
 </style>

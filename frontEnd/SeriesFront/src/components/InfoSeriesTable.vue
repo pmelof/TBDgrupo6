@@ -20,10 +20,15 @@
             <el-table-column
               prop="columna2"
               label=""
-              class-name="wordWrap"
+              class="wordWrap"
               width="450">
             </el-table-column>
           </el-table>
+          <br>
+          <el-button
+          type="primary"
+          v-on:click="closeModal"
+          >Cerrar</el-button>
       </el-col>
     </el-row>
   </template>
@@ -36,7 +41,11 @@
           tableData: [],
           urlImg: '',
           nombreSerie: '',
+          isOpenChild: true,
         }
+      },
+      props: {
+        nombreSerie: String
       },
       methods: {
         getInfoSerie(nombreSerie) {
@@ -81,10 +90,15 @@
                 this.tableData.push(repartoObject)
             })
         },
+
+        closeModal() {
+          this.isOpenChild = false
+          this.$emit('isOpenChild', this.isOpenChild)
+        }
       },
 
       created() {
-        this.getInfoSerie("Breaking Bad")
+        this.getInfoSerie(this.nombreSerie)
       },
     }
   </script>
@@ -94,7 +108,7 @@
     font-weight: bold;
   }
 
-  td.wordWrap {
+  .wordWrap {
     word-wrap: normal;
   }
 </style>

@@ -4,12 +4,12 @@
       <div v-if="isOpen">
         <div class="overlay" @click.self="isOpen = false;">
           <div class="modal">
-            <InfoSeriesTable />
+            <InfoSeriesTable @isOpenChild="close" :nombreSerie="this.nombreSerie"></InfoSeriesTable>
           </div>
         </div>
       </div>
     </transition>
-    <el-button type="primary" v-on:click="isOpen = !isOpen;">Ver información de serie</el-button>
+    <el-button type="primary" v-on:click="isOpen = !isOpen;" class="simpleButton">{{this.nombreSerie}}</el-button>
   </div>
 </template>
 
@@ -20,9 +20,17 @@ export default {
   components: {
     InfoSeriesTable,
   },
+  props: {
+    nombreSerie: String
+  },
   data: function() {
     return {
       isOpen: false,
+    }
+  },
+  methods: {
+    close(isOpenChild) {
+      this.isOpen = isOpenChild
     }
   }
 }
@@ -65,5 +73,12 @@ export default {
   background: #00000094;
   z-index: 999;
   transition: opacity 0.2s ease;
+}
+
+.simpleButton {
+  background: #FFFFFF;
+  border: none;
+  color: grey;
+  padding: 5px 10px;
 }
 </style>
