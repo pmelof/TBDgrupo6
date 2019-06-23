@@ -48,6 +48,8 @@ dependencies {
     compile 'io.springfox:springfox-swagger-ui:2.9.2'
     //Twitter
     compile("org.twitter4j:twitter4j-stream:4.0.2");
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j', version: '1.4.0.RELEASE'
     
 
 

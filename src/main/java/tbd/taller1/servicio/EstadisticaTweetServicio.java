@@ -1,5 +1,6 @@
 package tbd.taller1.servicio;
 
+import org.neo4j.driver.v1.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -17,11 +18,14 @@ import tbd.taller1.mongo.TweetService;
 import tbd.taller1.repositorio.*;
 
 import javax.annotation.PostConstruct;
+import javax.websocket.Session;
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.sql.Types.NULL;
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
+
 
 @RestController
 @RequestMapping("/estadisticaTweets")
@@ -65,7 +69,7 @@ public class EstadisticaTweetServicio {
 
         Iterable<Serie> series = this.serieRepositorio.findAll();
 
-        System.out.println("########################## Series #############################\n");
+        //System.out.println("########################## Series #############################\n");
 
 
         int id=1;
@@ -100,7 +104,7 @@ public class EstadisticaTweetServicio {
                     System.exit(0);
                 }
             }
-            System.out.println(serie.getNombre()+": "+ positivos+","+neutros+","+negativos);
+            //System.out.println(serie.getNombre()+": "+ positivos+","+neutros+","+negativos);
 
             EstadisticaTweet estadisticaTweet = new EstadisticaTweet();
 
@@ -119,7 +123,7 @@ public class EstadisticaTweetServicio {
         Iterable<Actor> actores = this.actorRepositorio.findAll();
 
 
-        System.out.println("########################## Actores #############################\n");
+        //System.out.println("########################## Actores #############################\n");
         for (Actor actor:actores) {
 
             positivos=0;
@@ -144,7 +148,7 @@ public class EstadisticaTweetServicio {
                     System.exit(0);
                 }
             }
-            System.out.println(actor.getNombre()+": "+ positivos+","+neutros+","+negativos);
+            //System.out.println(actor.getNombre()+": "+ positivos+","+neutros+","+negativos);
 
             EstadisticaTweet estadisticaTweet = new EstadisticaTweet();
 
@@ -163,7 +167,7 @@ public class EstadisticaTweetServicio {
 
 
 
-        System.out.println("########################## Personajes #############################\n");
+        //System.out.println("########################## Personajes #############################\n");
 
         for (Personaje personaje:personajes) {
             positivos=0;
@@ -188,7 +192,7 @@ public class EstadisticaTweetServicio {
                     System.exit(0);
                 }
             }
-            System.out.println(personaje.getNombre()+": "+ positivos+","+neutros+","+negativos);
+            //System.out.println(personaje.getNombre()+": "+ positivos+","+neutros+","+negativos);
 
             EstadisticaTweet estadisticaTweet = new EstadisticaTweet();
 
