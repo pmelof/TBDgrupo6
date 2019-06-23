@@ -40,105 +40,96 @@
 
 <script>
 import axios from 'axios'
+import Highcharts from 'highcharts'
+import exportingInit from 'highcharts/modules/networkgraph.js'
+exportingInit(Highcharts)
+
 export default {
     data() {
         return {
             chartOptions: {
-                series: [
-                    {
-                        name: 'Positiva',
-                        data: [],
-                        color: '#56FF84',
+                series: [{
+                    marker: {
+                        radius: 13
                     },
-                    {
-                        name: 'Neutra',
-                        data: [],
-                        color: '#FFEA9E',
+                    dataLabels: {
+                        enabled: true,
+                        textPath: {
+                            enabled: false
+                        },
+                        linkFormat: '',
+                        allowOverlap: true
                     },
-                    {
-                        name: 'Negativa',
-                        data: [],
-                        color: '#FF9291',
-                    },
-                ],
+                    data: [
+                        ['Proto Indo-European', 'Balto-Slavic'],
+                        ['Proto Indo-European', 'Germanic'],
+                        ['Proto Indo-European', 'Celtic'],
+                        ['Proto Indo-European', 'Italic'],
+                        ['Proto Indo-European', 'Hellenic'],
+                        ['Proto Indo-European', 'Anatolian'],
+                        ['Proto Indo-European', 'Indo-Iranian'],
+                        ['Proto Indo-European', 'Tocharian'],
+                        ['Indo-Iranian', 'Dardic'],
+                        ['Indo-Iranian', 'Indic'],
+                        ['Indo-Iranian', 'Iranian'],
+                        ['Iranian', 'Old Persian'],
+                        ['Old Persian', 'Middle Persian'],
+                        ['Indic', 'Sanskrit'],
+                        ['Italic', 'Osco-Umbrian'],
+                        ['Italic', 'Latino-Faliscan'],
+                        ['Latino-Faliscan', 'Latin'],
+                        ['Celtic', 'Brythonic'],
+                        ['Celtic', 'Goidelic']
+                    ]
+                }],
                 chart: {
-                    renderTo: 'container',
-                    type: 'bar',
-                    height: 650,
+                    type: 'networkgraph',
+                    marginTop: 80
                 },
                 title: {
-                    text: 'Percepción de series',
-                },
+                        text: 'The Indo-European Laungauge Tree'
+                    },
                 subtitle: {
-                    text: '(estadísticas obtenidas de la red social Twitter)',
-                },
-                xAxis: {
-                    categories: [],
-                    title: {
-                        text: null,
-                    },
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Número de tuits',
-                        align: 'high',
-                    },
-                    labels: {
-                        overflow: 'justify',
-                    },
-                },
-                tooltip: {
-                    valueSuffix: ' tuits',
+                    text: 'A Force-Directed Network Graph in Highcharts'
                 },
                 plotOptions: {
-                    bar: {
-                        dataLabels: {
-                            enabled: true,
-                        },
-                    },
-                },
-                credits: {
-                    enabled: false,
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'top',
-                    x: -40,
-                    y: 80,
-                    floating: true,
-                    borderWidth: 1,
-                    shadow: true,
+                    networkgraph: {
+                        keys: ['from', 'to'],
+                        layoutAlgorithm: {
+                            enableSimulation: true,
+                            integration: 'verlet',
+                            linkLength: 100
+                        }
+                    }
                 },
             },
             seriesInfo: [],
         }
     },
     methods: {
-        getSerie() {
-            axios.get('http://localhost:8080/series').then(response => {
-                this.seriesInfo = response.data
-                for (var serie of this.seriesInfo) {
-                    if (serie.estadisticaTweetSerie != null) {
-                        this.chartOptions.xAxis.categories.push(serie.nombre)
-                        // console.log(serie.nombre)
-                        this.chartOptions.series[0].data.push(
-                            serie.estadisticaTweetSerie.nroTweetsPositivos
-                        )
-                        this.chartOptions.series[1].data.push(
-                            serie.estadisticaTweetSerie.nroTweetsNeutros
-                        )
-                        this.chartOptions.series[2].data.push(
-                            serie.estadisticaTweetSerie.nroTweetsNegativos
-                        )
-                    }
-                }
-            })
-        },
+        // getSerie() {
+        //     axios.get('http://localhost:8080/series').then(response => {
+        //         this.seriesInfo = response.data
+        //         for (var serie of this.seriesInfo) {
+        //             if (serie.estadisticaTweetSerie != null) {
+        //                 this.chartOptions.xAxis.categories.push(serie.nombre)
+        //                 // console.log(serie.nombre)
+        //                 this.chartOptions.series[0].data.push(
+        //                     serie.estadisticaTweetSerie.nroTweetsPositivos
+        //                 )
+        //                 this.chartOptions.series[1].data.push(
+        //                     serie.estadisticaTweetSerie.nroTweetsNeutros
+        //                 )
+        //                 this.chartOptions.series[2].data.push(
+        //                     serie.estadisticaTweetSerie.nroTweetsNegativos
+        //                 )
+        //             }
+        //         }
+        //     })
+        // },
     },
     created() {
-        this.getSerie()
+        // this.getSerie()
     },
 }
 </script>
