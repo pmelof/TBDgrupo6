@@ -1,5 +1,5 @@
 
-package tbd.taller1.servicio;
+package tbd.taller1.neo4j;
 
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
@@ -75,7 +75,7 @@ public class Neo4jServicio {
                 String usuarioTwitter = tweet.getUserScreenName();  // NOMBRE USUARIO
                 int usuarioFollowers = tweet.getUserFollowersCount();
                 // CREAR NODO USUARIO
-                session.run("CREATE (u:Usuario {name:'"+usuarioTwitter+"',followers:"+usuarioFollowers+"})");
+                session.run("CREATE(u:Usuario {name:'"+usuarioTwitter+"',followers:"+usuarioFollowers+"})");
 
                 // INFO TWEET
                 String textTweet = tweet.getText();
@@ -96,22 +96,57 @@ public class Neo4jServicio {
     }
 
     @RequestMapping(value = "/top={rank}", method = RequestMethod.GET)
-    public void topUsuarios (@PathVariable("rank") Integer rank){
+    public ArrayList<Usuario> topUsuarios (@PathVariable("rank") Integer rank){
 
         Driver driver = GraphDatabase.driver( "bolt://localhost", AuthTokens.basic( "neo4j", "1234" ) );
         Session session = driver.session();
 
-        //session.run();
+        StatementResult nodosUsuarios = session.run("MATCH (u:Usuario) return u.name as name, u.followers as followers order by followers desc limit "+rank);
 
+        ArrayList<Usuario> usuariosNeo4j = new ArrayList<>();
 
-
-
-
-
-
-
+        while ( nodosUsuarios.hasNext()){
+            Record record = nodosUsuarios.next();
+            String userName = record.get("name").toString().replace("\"","");
+            int followers =  Integer.parseInt(record.get("followers").toString());
+            Usuario usuario = new Usuario();
+            usuario.setUserName(userName);
+            usuario.setFollowers(followers);
+            usuariosNeo4j.add(usuario);
+        }
+        session.close();
+        driver.close();
+        return usuariosNeo4j;
     }
 
+    @RequestMapping(value = "/{serie}/top={rank}", method = RequestMethod.GET)
+    public ArrayList<Usuario> topUsuariosBySerie (@PathVariable("serie") String serie,@PathVariable("rank") Integer rank){
+
+        Driver driver = GraphDatabase.driver( "bolt://localhost", AuthTokens.basic( "neo4j", "1234" ) );
+        Session session = driver.session();
+
+        serie = serie.replace("_"," ");
+
+        StatementResult nodosUsuarios = session.run("MATCH (u:Usuario) " +
+                "match (s:Serie) where s.name='"+serie+"' " +
+                "match (u)-[label]->(s)" +
+                "return u.name as name, u.followers as followers order by followers desc limit "+rank);
+
+        ArrayList<Usuario> usuariosNeo4j = new ArrayList<>();
+
+        while ( nodosUsuarios.hasNext()){
+            Record record = nodosUsuarios.next();
+            String userName = record.get("name").toString().replace("\"","");
+            int followers =  Integer.parseInt(record.get("followers").toString());
+            Usuario usuario = new Usuario();
+            usuario.setUserName(userName);
+            usuario.setFollowers(followers);
+            usuariosNeo4j.add(usuario);
+        }
+        session.close();
+        driver.close();
+        return usuariosNeo4j;
+    }
 
 
 
