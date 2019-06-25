@@ -63,11 +63,11 @@ public class Classifier {
         double[] infoAnalisis = new double[3];
         double probabilidadNegativa = prob[1];
 
-        if(probabilidadNegativa <= 0.4){ tipoDeValorizacion= 1;}
-        else if(probabilidadNegativa > 0.4 && probabilidadNegativa < 0.6){tipoDeValorizacion=0;}
-        else if(probabilidadNegativa >= 0.6){tipoDeValorizacion=-1;}
+        if(probabilidadNegativa <= 0.45){ tipoDeValorizacion= 1;}
+        else if(probabilidadNegativa > 0.45 && probabilidadNegativa < 0.55){tipoDeValorizacion=0;}
+        else if(probabilidadNegativa >= 0.55){tipoDeValorizacion=-1;}
 
-        infoAnalisis[0] =tipoDeValorizacion;
+        infoAnalisis[0] = tipoDeValorizacion;
         infoAnalisis[1] = prob[0];
         infoAnalisis[2] = prob[1];
 
