@@ -1,11 +1,34 @@
 <template>
   <el-container>
     <el-header>
-      <h1>Tuiteros más influyentes</h1>
+      <h1>Tuiteros más influyentes por serie</h1>
     </el-header>
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="24">
+        <el-col :span="6">
+          <el-card class="box-card">
+            <h3>Filtro</h3>
+            <h5>
+              Seleccione una serie
+            </h5>
+            <div id="radio">
+                <el-radio-group v-model="radio">
+                  <el-radio v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
+                    <InfoSeries :nombreSerie="serie.nombre">{{serie.nombre}}</InfoSeries>
+                  </el-radio>
+                </el-radio-group>
+            </div>
+            <br>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              v-on:click="updateChart"
+              :disabled="desactivarBoton"
+              >Mostrar datos
+            </el-button>
+          </el-card>
+        </el-col>
+        <el-col :span="18">
           <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
@@ -17,25 +40,19 @@
 
 <script>
 import axios from 'axios'
+import InfoSeries from '@/components/InfoSeries.vue'
 export default {
+    components: {
+        InfoSeries,
+    },
     data() {
         return {
             chartOptions: {
                 series: [
                     {
-                        name: 'Positiva',
+                        name: 'Número de seguidores',
                         data: [],
-                        color: '#56FF84',
-                    },
-                    {
-                        name: 'Neutra',
-                        data: [],
-                        color: '#FFEA9E',
-                    },
-                    {
-                        name: 'Negativa',
-                        data: [],
-                        color: '#FF9291',
+                        color: '#2f7ed8',
                     },
                 ],
                 chart: {
@@ -44,7 +61,7 @@ export default {
                     height: 650,
                 },
                 title: {
-                    text: 'Tuiteros más influyentes',
+                    text: 'Tuiteros más influyentes por serie: ',
                 },
                 subtitle: {
                     text: '(estadísticas obtenidas de la red social Twitter)',
@@ -54,11 +71,14 @@ export default {
                     title: {
                         text: null,
                     },
+                    labels: {
+                        step: 1,
+                    }
                 },
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Número de tuits',
+                        text: 'Número de seguidores',
                         align: 'high',
                     },
                     labels: {
@@ -66,7 +86,7 @@ export default {
                     },
                 },
                 tooltip: {
-                    valueSuffix: ' tuits',
+                    valueSuffix: ' seguidores',
                 },
                 plotOptions: {
                     bar: {
@@ -83,39 +103,202 @@ export default {
                     align: 'right',
                     verticalAlign: 'top',
                     x: -40,
-                    y: 80,
+                    y: 200,
                     floating: true,
                     borderWidth: 1,
                     shadow: true,
                 },
             },
             seriesInfo: [],
+            radio: '',
+            desactivarBoton: true,
         }
     },
     methods: {
-        getSerie() {
+        initChart() {
+            this.desactivarBoton = true
+
             axios.get('http://localhost:8080/series').then(response => {
                 this.seriesInfo = response.data
-                for (var serie of this.seriesInfo) {
-                    if (serie.estadisticaTweetSerie != null) {
-                        this.chartOptions.xAxis.categories.push(serie.nombre)
-                        // console.log(serie.nombre)
-                        this.chartOptions.series[0].data.push(
-                            serie.estadisticaTweetSerie.nroTweetsPositivos
-                        )
-                        this.chartOptions.series[1].data.push(
-                            serie.estadisticaTweetSerie.nroTweetsNeutros
-                        )
-                        this.chartOptions.series[2].data.push(
-                            serie.estadisticaTweetSerie.nroTweetsNegativos
-                        )
+
+                var nombreSerie = this.seriesInfo[0].nombre
+                this.radio = nombreSerie
+                this.chartOptions.title.text = 'Tuiteros más influyentes por serie: '.concat(nombreSerie)
+                var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
+
+                axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal + '/top=5').then(response => {
+                    var tuiteroInfo = response.data
+
+                    var largo = tuiteroInfo.length
+                    var i = 0
+
+                    while (i < largo) {
+                        this.chartOptions.xAxis.categories.push(tuiteroInfo[i].userName)
+                        this.chartOptions.series[0].data.push(tuiteroInfo[i].followers)
+                        i++
                     }
-                }
+
+                    this.desactivarBoton = false
+                })
             })
         },
+
+        updateChart() {
+            this.desactivarBoton = true
+
+            this.chartOptions.xAxis.categories.length = 0
+            this.chartOptions.series[0].data.length = 0
+            
+            var nombreSerie = this.radio
+            this.chartOptions.title.text = 'Tuiteros más influyentes por serie: '.concat(nombreSerie)
+            var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
+
+            axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal + '/top=5').then(response => {
+                var tuiteroInfo = response.data
+
+                var largo = tuiteroInfo.length
+                var i = 0
+
+                while (i < largo) {
+                    this.chartOptions.xAxis.categories.push(tuiteroInfo[i].userName)
+                    this.chartOptions.series[0].data.push(tuiteroInfo[i].followers)
+                    i++
+                }
+
+                this.desactivarBoton = false
+            })
+        }
+
+        ///////////////////////////////
+
+        // INTENTO DE CARGAR LOS DATOS DE FORMA SINCRONA. LOS ARREGLOS SERIES.DATA DEL CHART SE ACTUALIZAN PERO POR ALGUNA RAZON EL CHART NO SE REDIBUJA.
+
+        /* async getUsuarios() {
+            try {
+                await this.getSeries()
+            } catch(error) {
+                console.log(error)
+            }
+
+            this.chartOptions.xAxis.length = 0
+            this.chartOptions.series[0].data.length = 0
+            this.chartOptions.series[1].data.length = 0
+            this.chartOptions.series[2].data.length = 0
+            this.chartOptions.series[3].data.length = 0
+            this.chartOptions.series[4].data.length = 0
+
+            var nroSeries = this.seriesInfo.length
+
+            var i = 0
+            for (i = 0; i < nroSeries; i++) {
+                this.chartOptions.xAxis.categories.push("-")
+                this.chartOptions.series[0].data.push(0)
+                this.chartOptions.series[1].data.push(0)
+                this.chartOptions.series[2].data.push(0)
+                this.chartOptions.series[3].data.push(0)
+                this.chartOptions.series[4].data.push(0)
+            }
+
+            var nombreSerieFinal = ''
+
+            var indiceSerie = 0
+            for (var serie of this.seriesInfo) {
+                this.checkList.push(serie.nombre)
+                this.chartOptions.xAxis.categories[indiceSerie] = serie.nombre
+                nombreSerieFinal = serie.nombre.replace(/ /g, "_")
+                this.getUsuariosSerie(nombreSerieFinal, indiceSerie)
+                indiceSerie++
+            }
+        },
+
+        getSeries() {
+            return axios.get('http://localhost:8080/series').then(response => {
+                this.seriesInfo = response.data
+            })
+        },
+
+        getUsuariosSerie(nombreSerieFinal, indiceSerie) {
+            axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal + '/top=5').then(response => {
+                var tuiteroInfo = response.data
+
+                var largo = tuiteroInfo.length
+                var i = 0
+
+                while (i < largo) {
+                    this.chartOptions.series[i].data[indiceSerie] = tuiteroInfo[i].followers
+                    i++
+                }
+
+                while (i < 5) {
+                    this.chartOptions.series[i].data[indiceSerie] = 0
+                    i++
+                }
+            })
+        } */
+
+        ///////////////////////////////
+
+        // LO SIGUIENTE FUNCIONA CARGANDO LOS TUITEROS DE TODAS LAS SERIES, PERO REQUIERE TRABAJAR DE FORMA ASINCRONA, POR LO QUE ES MUY, MUY LENTO.
+
+        /* async getUsuarios() {
+            try {
+                await this.getSeries()
+            } catch(error) {
+                console.log(error)
+            }
+
+            this.chartOptions.xAxis.length = 0
+            this.chartOptions.series[0].data.length = 0
+            this.chartOptions.series[1].data.length = 0
+            this.chartOptions.series[2].data.length = 0
+            this.chartOptions.series[3].data.length = 0
+            this.chartOptions.series[4].data.length = 0
+
+            var nombreSerieFinal = ''
+
+            for (var serie of this.seriesInfo) {
+                this.checkList.push(serie.nombre)
+                this.chartOptions.xAxis.categories.push(serie.nombre)
+                nombreSerieFinal = serie.nombre.replace(/ /g, "_")
+                try {
+                    await this.getUsuariosSerie(nombreSerieFinal)
+                } catch(error) {
+                    console.log(error)
+                }
+            }
+        },
+
+        getSeries() {
+            return axios.get('http://localhost:8080/series').then(response => {
+                this.seriesInfo = response.data
+            })
+        },
+
+        getUsuariosSerie(nombreSerieFinal) {
+            return axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal + '/top=5').then(response => {
+                var tuiteroInfo = response.data
+
+                var largo = tuiteroInfo.length
+                var i = 0
+                while (i < largo) {
+                    this.chartOptions.series[i].data.push(
+                        tuiteroInfo[i].followers
+                    )
+                    i++
+                }
+
+                while (i < 5) {
+                    this.chartOptions.series[i].data.push(0)
+                    i++
+                }
+            })
+        } */
     },
     created() {
-        this.getSerie()
+        this.initChart()
+
+        // PARA LOS METODOS COMENTADOS ARRIBA
+        // this.getUsuarios()
     },
 }
 </script>

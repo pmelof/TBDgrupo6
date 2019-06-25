@@ -10,10 +10,7 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
 import org.neo4j.driver.v1.TransactionWork;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tbd.taller1.analizadorsentimental.ServicioAnalizadorSentimental;
 import tbd.taller1.elasticsearch.ElasticsearchTweetRepository;
 import tbd.taller1.elasticsearch.Tweet;
@@ -28,6 +25,7 @@ import java.util.List;
 import static org.neo4j.driver.v1.Values.parameters;
 @RestController
 @RequestMapping("/neo4j")
+@CrossOrigin(origins = "*")
 public class Neo4jServicio {
 
 
