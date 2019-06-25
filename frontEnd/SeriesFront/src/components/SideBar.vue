@@ -24,16 +24,16 @@
     <el-submenu index="2">
       <template slot="title">
         <i class="el-icon-trophy-1"></i>
-        <span>Sprint 2</span>
+        <span>Tuiteros</span>
       </template>
       <router-link to="/tweetsSerie" style="text-decoration:none">
         <el-menu-item index="2-1">Tweets sobre una serie</el-menu-item>
       </router-link>
       <router-link to="/usuariosInfluyentes" style="text-decoration:none">
-        <el-menu-item index="2-2">Usuarios más influyentes</el-menu-item>
+        <el-menu-item index="2-2">Tuiteros más influyentes</el-menu-item>
       </router-link>
       <router-link to="/pesoUsuario" style="text-decoration:none">
-        <el-menu-item index="3-2">Percepción según peso del usuario</el-menu-item>
+        <el-menu-item index="3-2">Percepción según peso del tuitero</el-menu-item>
       </router-link>
     </el-submenu>
     <!-- <el-submenu index="3">

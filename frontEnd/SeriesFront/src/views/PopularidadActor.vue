@@ -5,30 +5,35 @@
     </el-header>
     <el-main>
       <el-row :gutter="20">
-        <!-- <el-col :span="6">
+        <el-col :span="6">
           <el-card class="box-card">
             <h3>Filtro</h3>
             <h5>
               Seleccione uno o
               <br>más actores
             </h5>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Peter Dinklage
-            </label>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Emilia Clarke
-            </label>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Bryan Cranston
-            </label>
+            <div id="checkbox">
+                <el-checkbox-group v-model="checkList" @change="handleFilterChange">
+                  <el-checkbox v-for="personaje in this.personajesInfo" :label="personaje.actor.nombre" :key="personaje.actor.nombre">
+                    <InfoSeries :nombreSerie="personaje.actor.nombre">{{personaje.actor.nombre}}</InfoSeries>
+                  </el-checkbox>
+                </el-checkbox-group>
+            </div>
             <br>
-            <label class="button">Filtrar</label>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              v-on:click="updateChart"
+              >Filtrar</el-button>
+            <br>
+            <br>
+            <el-button
+              type="primary"
+              v-on:click="removeFilter"
+              >Quitar filtro</el-button>
           </el-card>
-        </el-col>-->
-        <el-col :span="24">
+        </el-col>
+        <el-col :span="18">
           <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
@@ -40,7 +45,11 @@
 
 <script>
 import axios from 'axios'
+import InfoSeries from '@/components/InfoSeries.vue'
 export default {
+    components: {
+        InfoSeries,
+    },
     data() {
         return {
             actores: [],
@@ -55,7 +64,7 @@ export default {
                 chart: {
                     renderTo: 'container',
                     type: 'bar',
-                    height: 650,
+                    height: 1000,
                 },
                 title: {
                     text: 'Popularidad relativa de actores de series',
@@ -68,6 +77,9 @@ export default {
                     title: {
                         text: null,
                     },
+                    labels: {
+                        step: 1,
+                    }
                 },
                 yAxis: {
                     min: 0,
@@ -98,34 +110,94 @@ export default {
                     align: 'right',
                     verticalAlign: 'top',
                     x: -40,
-                    y: 80,
+                    y: 100,
                     floating: true,
                     borderWidth: 1,
                     shadow: true,
                 },
             },
+            personajesInfo: [],
+            checkList: [],
         }
     },
     computed: {},
     methods: {
         getActores() {
+            this.chartOptions.xAxis.categories.length = 0
+            this.chartOptions.series[0].data.length = 0
+
             axios.get('http://localhost:8080/personajes').then(response => {
-                this.actores = response.data
-                for (var personaje of this.actores) {
+                this.personajesInfo = response.data
+                this.personajesInfo.sort(this.compare)
+
+                for (var personaje of this.personajesInfo) {
+                    personaje.actor.nombre = personaje.actor.nombre.concat(' | ' + personaje.serie.nombre)
+                    this.chartOptions.xAxis.categories.push(personaje.actor.nombre)
                     if (personaje.actor.estadisticaTweetActor != null) {
-                        if (personaje.actor.estadisticaTweetActor.nroTweets > 0) {
-                            this.chartOptions.xAxis.categories.push(
-                                personaje.actor.nombre.concat(
-                                    ' | ' + personaje.serie.nombre
-                                )
-                            )
-                            this.chartOptions.series[0].data.push(
-                                personaje.actor.estadisticaTweetActor.nroTweets
-                            )
-                        }
+                        this.chartOptions.series[0].data.push(
+                            personaje.actor.estadisticaTweetActor.nroTweets
+                        )
+                    } else {
+                        this.chartOptions.series[0].data.push(0)
                     }
+
+                    this.checkList.push(personaje.actor.nombre)
                 }
             })
+        },
+
+        compare(a, b) {
+            if ((a.actor.estadisticaTweetActor == null) || (b.actor.estadisticaTweetActor == null)) {
+                return 1
+            }
+
+            const nroTweetsA = a.actor.estadisticaTweetActor.nroTweets
+            const nroTweetsB = b.actor.estadisticaTweetActor.nroTweets
+
+            if (nroTweetsA > nroTweetsB) {
+                return -1
+            } else if (nroTweetsA < nroTweetsB) {
+                return 1
+            }
+            return 0
+        },
+
+        updateChart() {
+            this.chartOptions.xAxis.categories.length = 0
+            this.chartOptions.series[0].data.length = 0
+
+            for (var personaje of this.personajesInfo) {
+                var poner = false
+
+                for (var nombreActor of this.checkList) {
+                    if (nombreActor == personaje.actor.nombre) {
+                        poner = true
+                        break
+                    }
+                }
+
+                if (poner == true) {
+                    this.chartOptions.xAxis.categories.push(personaje.actor.nombre)
+                    if (personaje.actor.estadisticaTweetActor != null) {
+                        this.chartOptions.series[0].data.push(
+                            personaje.actor.estadisticaTweetActor.nroTweets
+                        )
+                    } else {
+                        this.chartOptions.series[0].data.push(0)
+                    }
+                }
+            }
+        },
+
+        removeFilter() {
+            this.checkList.length = 0
+            this.getActores()
+        },
+
+        handleFilterChange(val) {
+            if (this.checkList.length == 0) {
+                this.getActores()
+            }
         },
     },
     created() {

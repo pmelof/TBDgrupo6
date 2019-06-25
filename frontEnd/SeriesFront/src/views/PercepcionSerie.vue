@@ -86,6 +86,9 @@ export default {
                     title: {
                         text: null,
                     },
+                    labels: {
+                        step: 1,
+                    }
                 },
                 yAxis: {
                     min: 0,
@@ -115,7 +118,7 @@ export default {
                     align: 'right',
                     verticalAlign: 'top',
                     x: -40,
-                    y: 80,
+                    y: 120,
                     floating: true,
                     borderWidth: 1,
                     shadow: true,
@@ -221,10 +224,6 @@ export default {
             if (this.checkList.length == 0) {
                 this.getSeries()
             }
-        },
-
-        getInfoSerie() {
-            console.log("hola")
         },
     },
     created() {

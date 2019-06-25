@@ -7,7 +7,7 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <h2 v-bind:src="nombreSerie">{{nombreSerie}}</h2>
+        <h2 v-bind:src="nombreSerieFiltrado">{{nombreSerieFiltrado}}</h2>
         <el-table
             :data="tableData"
             style="width: 100%">
@@ -40,8 +40,8 @@
         return {
           tableData: [],
           urlImg: '',
-          nombreSerie: '',
           isOpenChild: true,
+          nombreSerieFiltrado: ''
         }
       },
       props: {
@@ -49,11 +49,17 @@
       },
       methods: {
         getInfoSerie(nombreSerie) {
+            if (nombreSerie.includes("|") == true) {
+              this.nombreSerieFiltrado = nombreSerie.split("|")[1].substring(1)
+            } else {
+              this.nombreSerieFiltrado = nombreSerie
+            }
+
             axios.get('http://localhost:8080/series').then(response => {
                 var seriesInfoTemp = response.data
                 for (var serie of seriesInfoTemp) {
-                    if (serie.nombre == nombreSerie) {
-                        this.nombreSerie = serie.nombre
+                    if (serie.nombre == this.nombreSerieFiltrado) {
+                        this.nombreSerieFiltrado = serie.nombre
 
                         var fechaInicio = {columna1: 'Fecha de inicio', columna2: serie.fechaInicio}
 
@@ -81,7 +87,7 @@
                 var reparto = ''
                 var personajesInfo = response.data
                 for (var personaje of personajesInfo) {
-                    if (personaje.serie.nombre == nombreSerie) {
+                    if (personaje.serie.nombre == this.nombreSerieFiltrado) {
                         reparto += personaje.actor.nombre + ' (' + personaje.nombre + '), '
                     }
                 }

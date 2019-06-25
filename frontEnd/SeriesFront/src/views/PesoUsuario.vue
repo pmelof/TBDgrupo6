@@ -4,30 +4,6 @@
       <h1>Percepción de series según el peso del usuario</h1>
     </el-header>
     <el-main>
-      <el-row :gutter="20">
-        <!-- <el-col :span="6">
-          <el-card class="box-card">
-            <h3>Filtro</h3>
-            <h5>
-              Seleccione uno o
-              <br>más series
-            </h5>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Game of Thrones
-            </label>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Breaking Bad
-            </label>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Chernobyl
-            </label>
-            <br>
-            <label class="button">Filtrar.</label>
-          </el-card>
-        </el-col>-->
         <el-col :span="24">
           <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
@@ -87,10 +63,10 @@ export default {
                     marginTop: 80
                 },
                 title: {
-                        text: 'The Indo-European Laungauge Tree'
+                        text: 'Percecpión de series según el peso del usuario'
                     },
                 subtitle: {
-                    text: 'A Force-Directed Network Graph in Highcharts'
+                    text: '(estadísticas obtenidas de la red social Twitter)',
                 },
                 plotOptions: {
                     networkgraph: {

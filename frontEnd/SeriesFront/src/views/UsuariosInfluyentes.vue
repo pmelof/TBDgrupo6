@@ -1,33 +1,10 @@
 <template>
   <el-container>
     <el-header>
-      <h1>Usuarios más influyentes</h1>
+      <h1>Tuiteros más influyentes</h1>
     </el-header>
     <el-main>
       <el-row :gutter="20">
-        <!-- <el-col :span="6">
-          <el-card class="box-card">
-            <h3>Filtro</h3>
-            <h5>
-              Seleccione uno o
-              <br>más series
-            </h5>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Game of Thrones
-            </label>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Breaking Bad
-            </label>
-            <label class="container">
-              <input type="checkbox" checked="checked">
-              <span class="checkmark"></span> Chernobyl
-            </label>
-            <br>
-            <label class="button">Filtrar.</label>
-          </el-card>
-        </el-col>-->
         <el-col :span="24">
           <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
@@ -67,7 +44,7 @@ export default {
                     height: 650,
                 },
                 title: {
-                    text: 'Percepción de series',
+                    text: 'Tuiteros más influyentes',
                 },
                 subtitle: {
                     text: '(estadísticas obtenidas de la red social Twitter)',
