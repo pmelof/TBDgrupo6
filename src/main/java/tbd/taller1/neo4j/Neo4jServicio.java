@@ -36,7 +36,7 @@ public class Neo4jServicio {
     @Autowired
     private ElasticsearchTweetRepository elasticsearchTweetRepository;
     @Autowired
-    ServicioAnalizadorSentimental servicioAnalizadorSentimental;
+    private ServicioAnalizadorSentimental servicioAnalizadorSentimental;
 
 
     @PostConstruct
@@ -57,7 +57,7 @@ public class Neo4jServicio {
             String emisorSerie = serie.getEmisor();
 
             // CREAR NODO SERIE
-            session.run("CREATE (s:Serie {name:'"+nombreSerie+"',emisor:'"+emisorSerie+"'})");
+            session.run("CREATE (s:Serie {name:'" + nombreSerie + "',emisor:'" + emisorSerie + "'})");
 
             // BUSCAR TWEETS REFERENCIADO A LA SERIE CON ELASTIC SEARCH
             List<tbd.taller1.elasticsearch.Tweet> tweets_series = new ArrayList<>();
@@ -74,9 +74,14 @@ public class Neo4jServicio {
                 // INFO USUARIO
                 String usuarioTwitter = tweet.getUserScreenName();  // NOMBRE USUARIO
                 int usuarioFollowers = tweet.getUserFollowersCount();
-                // CREAR NODO USUARIO
-                session.run("CREATE(u:Usuario {name:'"+usuarioTwitter+"',followers:"+usuarioFollowers+"})");
 
+
+                // CREAR NODO USUARIO
+                StatementResult verificacion = session.run("match (u:Usuario) where u.name='"+usuarioTwitter+"' return u.name as name, u.followers as followers");
+
+                if(!verificacion.hasNext()){
+                    session.run("CREATE(u:Usuario {name:'" + usuarioTwitter + "',followers:" + usuarioFollowers + "})");
+                }
                 // INFO TWEET
                 String textTweet = tweet.getText();
                 textTweet = textTweet.replaceAll("'","");
