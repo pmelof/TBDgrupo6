@@ -44,6 +44,49 @@ import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/networkgraph.js'
 exportingInit(Highcharts)
 
+
+////////////////////////////
+
+Highcharts.addEvent(
+    Highcharts.seriesTypes.networkgraph,
+    'afterSetOptions',
+    function (e) {
+        var colors = Highcharts.getOptions().colors,
+            i = 0,
+            nodes = {};
+        e.options.data.forEach(function (link) {
+
+            if (link[0] === 'Proto Indo-European') {
+                nodes['Proto Indo-European'] = {
+                    id: 'Proto Indo-European',
+                    marker: {
+                        radius: 20
+                    }
+                };
+                nodes[link[1]] = {
+                    id: link[1],
+                    marker: {
+                        radius: 10
+                    },
+                    color: colors[i++]
+                };
+            } else if (nodes[link[0]] && nodes[link[0]].color) {
+                nodes[link[1]] = {
+                    id: link[1],
+                    color: nodes[link[0]].color
+                };
+            }
+        });
+
+        e.options.nodes = Object.keys(nodes).map(function (id) {
+            return nodes[id];
+        });
+    }
+);
+
+////////////////////////////
+
+
 export default {
     data() {
         return {
@@ -61,25 +104,7 @@ export default {
                         allowOverlap: true
                     },
                     data: [
-                        ['Proto Indo-European', 'Balto-Slavic'],
-                        ['Proto Indo-European', 'Germanic'],
-                        ['Proto Indo-European', 'Celtic'],
-                        ['Proto Indo-European', 'Italic'],
-                        ['Proto Indo-European', 'Hellenic'],
-                        ['Proto Indo-European', 'Anatolian'],
-                        ['Proto Indo-European', 'Indo-Iranian'],
-                        ['Proto Indo-European', 'Tocharian'],
-                        ['Indo-Iranian', 'Dardic'],
-                        ['Indo-Iranian', 'Indic'],
-                        ['Indo-Iranian', 'Iranian'],
-                        ['Iranian', 'Old Persian'],
-                        ['Old Persian', 'Middle Persian'],
-                        ['Indic', 'Sanskrit'],
-                        ['Italic', 'Osco-Umbrian'],
-                        ['Italic', 'Latino-Faliscan'],
-                        ['Latino-Faliscan', 'Latin'],
-                        ['Celtic', 'Brythonic'],
-                        ['Celtic', 'Goidelic']
+
                     ]
                 }],
                 chart: {
@@ -109,32 +134,69 @@ export default {
         }
     },
     methods: {
-        // initChart() {
-        //     this.desactivarBoton = true
-             getSerie() {
-                 axios.get('http://localhost:8080/series').then(response => {
-                     this.seriesInfo = response.data
-                     for (var serie of this.seriesInfo) {
-                         if (serie.estadisticaTweetSerie != null) {
-                             this.chartOptions.xAxis.categories.push(serie.nombre)
-                             // console.log(serie.nombre)
-                             this.chartOptions.series[0].data.push(
-                                 serie.estadisticaTweetSerie.nroTweetsPositivos
-                             )
-                             this.chartOptions.series[1].data.push(
-                                 serie.estadisticaTweetSerie.nroTweetsNeutros
-                             )
-                             this.chartOptions.series[2].data.push(
-                                 serie.estadisticaTweetSerie.nroTweetsNegativos
-                             )
-                         }
+         initChart() {
+             this.desactivarBoton = true
+
+             axios.get('http://localhost:8080/series').then(response => {
+                 this.seriesInfo = response.data
+
+                 var nombreSerie = this.seriesInfo[0].nombre
+                 this.radio = nombreSerie
+                 this.chartOptions.title.text = 'Tweets sobre una serie: '.concat(nombreSerie)
+                 var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
+
+                 axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal).then(response => {
+                     var relacionInfo = response.data
+                     var arreglo=[]
+
+                     var largo = relacionInfo.length
+                     var i=0
+
+                     while (i < largo) {
+                         arreglo.push(nombreSerieFinal)
+                         arreglo.push(relacionInfo[i].userName)
+                         //this.chartOptions.xAxis.categories.push(tuiteroInfo[i].userName)
+                         this.chartOptions.series[0].data.push(arreglo)
+                         arreglo=[]
+                         i++
                      }
+                     this.desactivarBoton = false
                  })
-             },
-        // },
+             })
+         },
+         updateChart() {
+             this.desactivarBoton = true
+
+             //this.chartOptions.xAxis.categories.length = 0
+             this.chartOptions.series[0].data.length = 0
+
+             var nombreSerie = this.radio
+             console.log(nombreSerie)
+             this.chartOptions.title.text = 'Tweets sobre una serie: '.concat(nombreSerie)
+             var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
+
+             axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal).then(response => {
+                  var relacionInfo = response.data
+                  var arreglo=[]
+
+                     var largo = relacionInfo.length
+                     var i=0
+
+                     while (i < largo) {
+                         arreglo.push(nombreSerieFinal)
+                         arreglo.push(relacionInfo[i].userName)
+                         console.log(arreglo)
+                         //this.chartOptions.xAxis.categories.push(tuiteroInfo[i].userName)
+                         this.chartOptions.series[0].data.push(arreglo)
+                         arreglo=[]
+                         i++
+                     }
+                  this.desactivarBoton = false
+             })
+         }
     },
     created() {
-        // this.getSerie()
+        this.initChart()
     },
 }
 </script>
