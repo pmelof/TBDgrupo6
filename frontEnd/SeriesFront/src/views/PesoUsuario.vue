@@ -75,10 +75,10 @@ export default {
                     marginTop: 80
                 },
                 title: {
-                        text: 'Percecpión de series según el peso del tuitero'
+                        text: 'Percepción de series según el peso del tuitero'
                     },
                 subtitle: {
-                    text: '(estadísticas obtenidas de la red social Twitter)<br>(<b>tamaño del nodo:</b> número de seguidores, <b>color del enlace:</b> valorización del mensaje)',
+                    text: '(estadísticas obtenidas de la red social Twitter)<br>Mayor tamaño del nodo denota mayor <b>número de seguidores</b><br>Color del enlace denota <b>valorización del mensaje</b> (verde es positivo, gris es neutro, rojo es negativo)',
                 },
                 plotOptions: {
                     networkgraph: {
@@ -106,7 +106,7 @@ export default {
                                 texto = texto.concat('<b>Valorización:</b> Neutra');
                             }
                         } else {
-                            texto = texto.concat('<b>(Serie)</b>')
+                            texto = texto.concat('<b>(Serie)</b>');
                         }
                         return texto;
                     }
@@ -119,51 +119,53 @@ export default {
         }
     },
     methods: {
-        initChart() {
+        async initChart() {
             this.desactivarBoton = true
 
-            axios.get('http://localhost:8080/series').then(response => {
-                this.seriesInfo = response.data
+            try {
+                await this.getSeries()
+            } catch(error) {
+                console.log(error)
+            }
 
-                var nombreSerie = this.seriesInfo[0].nombre
-                this.radio = nombreSerie
-                this.chartOptions.title.text = 'Percepción de series según el peso del tuitero: '.concat(nombreSerie)
-                var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
+            var nombreSerie = this.seriesInfo[0].nombre
+            this.radio = nombreSerie
+            this.chartOptions.title.text = 'Percepción de series según el peso del tuitero: '.concat(nombreSerie)
+            var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
 
-                this.nodoSerie = {esSerie: true, id: nombreSerie, marker: {radius: 30}}
-                this.chartOptions.series[0].nodes.push(this.nodoSerie)
+            this.nodoSerie = {esSerie: true, id: nombreSerie, marker: {radius: 30}}
+            this.chartOptions.series[0].nodes.push(this.nodoSerie)
 
-                axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal).then(response => {
-                    var tuitsInfo = response.data
+            axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal).then(response => {
+                var tuitsInfo = response.data
 
-                    var maxFollowers = 0
-                    for (var tuit of tuitsInfo) {
-                        if (tuit.followers > maxFollowers) {
-                            maxFollowers = tuit.followers
-                        }
+                var maxFollowers = 0
+                for (var tuit of tuitsInfo) {
+                    if (tuit.followers > maxFollowers) {
+                        maxFollowers = tuit.followers
+                    }
+                }
+
+                for (var tuit of tuitsInfo) {
+                    var tamanoNodo = (tuit.followers / maxFollowers) * 30
+                    var nodoUsuario = {esSerie: false, id: tuit.userName, color: '#C74ABF', marker: {radius: tamanoNodo}, seguidores: tuit.followers, mensaje: tuit.text, valorizacion: tuit.valorizacion}
+
+                    var colorLink = ''
+                    if (nodoUsuario.valorizacion == 1) {
+                        colorLink = '#56FF84'
+                    } else if (nodoUsuario.valorizacion == -1) {
+                        colorLink = '#FF9291'
+                    } else {
+                        colorLink = 'grey'
                     }
 
-                    for (var tuit of tuitsInfo) {
-                        var tamanoNodo = (tuit.followers / maxFollowers) * 30
-                        var nodoUsuario = {esSerie: false, id: tuit.userName, color: '#C74ABF', marker: {radius: tamanoNodo}, seguidores: tuit.followers, mensaje: tuit.text, valorizacion: tuit.valorizacion}
+                    this.chartOptions.series[0].data.push({from: this.nodoSerie.id, to: nodoUsuario.id, color: colorLink})
 
-                        var colorLink = ''
-                        if (nodoUsuario.valorizacion == 1) {
-                            colorLink = '#56FF84'
-                        } else if (nodoUsuario.valorizacion == -1) {
-                            colorLink = '#FF9291'
-                        } else {
-                            colorLink = 'grey'
-                        }
+                    this.chartOptions.series[0].nodes.push(nodoUsuario)
+                }
 
-                        this.chartOptions.series[0].data.push({from: this.nodoSerie.id, to: nodoUsuario.id, color: colorLink})
-
-                        this.chartOptions.series[0].nodes.push(nodoUsuario)
-                    }
-
-                    this.desactivarBoton = false
-                    this.nodoSerie = {}
-                })
+                this.desactivarBoton = false
+                this.nodoSerie = {}
             })
         },
 
@@ -211,6 +213,12 @@ export default {
                 this.desactivarBoton = false
                 this.nodoSerie = {}
             })
+        },
+
+        getSeries() {
+            return axios.get('http://localhost:8080/series').then(response => {
+                this.seriesInfo = response.data
+            })
         }
     },
     created() {
@@ -223,6 +231,7 @@ export default {
 .el-card {
     width: 100%;
     height: 80vh;
+    overflow-y: auto;
 }
 .el-header {
     display: flex;

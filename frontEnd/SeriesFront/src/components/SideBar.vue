@@ -27,7 +27,7 @@
         <span>Tuiteros</span>
       </template>
       <router-link to="/tweetsSerie" style="text-decoration:none">
-        <el-menu-item index="2-1">Tweets sobre una serie</el-menu-item>
+        <el-menu-item index="2-1">Tuits sobre una serie</el-menu-item>
       </router-link>
       <router-link to="/usuariosInfluyentes" style="text-decoration:none">
         <el-menu-item index="2-2">Tuiteros más influyentes por serie</el-menu-item>

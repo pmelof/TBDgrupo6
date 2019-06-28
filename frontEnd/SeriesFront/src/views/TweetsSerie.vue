@@ -5,31 +5,31 @@
     </el-header>
     <el-main>
       <el-row :gutter="20">
-              <el-col :span="6">
-                <el-card class="box-card">
-                  <h3>Filtro</h3>
-                  <h5>
-                    Seleccione una serie
-                  </h5>
-                  <div id="radio">
-                      <el-radio-group v-model="radio">
-                        <el-radio v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
-                          <InfoSeries :nombreSerie="serie.nombre">{{serie.nombre}}</InfoSeries>
-                        </el-radio>
-                      </el-radio-group>
-                  </div>
-                  <br>
-                  <el-button
-                    type="primary"
-                    icon="el-icon-search"
-                    v-on:click="updateChart"
-                    :disabled="desactivarBoton"
-                    >Mostrar datos
-                  </el-button>
-                </el-card>
-              </el-col>
-              <el-col :span="18">
-            <el-card class="box-card">
+        <el-col :span="6">
+          <el-card class="box-card">
+            <h3>Filtro</h3>
+            <h5>
+              Seleccione una serie
+            </h5>
+            <div id="radio">
+                <el-radio-group v-model="radio">
+                  <el-radio v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
+                    <InfoSeries :nombreSerie="serie.nombre">{{serie.nombre}}</InfoSeries>
+                  </el-radio>
+                </el-radio-group>
+            </div>
+            <br>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              v-on:click="updateChart"
+              :disabled="desactivarBoton"
+              >Mostrar datos
+            </el-button>
+          </el-card>
+        </el-col>
+        <el-col :span="18">
+          <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
         </el-col>
@@ -42,52 +42,13 @@
 import axios from 'axios'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/networkgraph.js'
+import InfoSeries from '@/components/InfoSeries.vue'
 exportingInit(Highcharts)
 
-
-////////////////////////////
-
-Highcharts.addEvent(
-    Highcharts.seriesTypes.networkgraph,
-    'afterSetOptions',
-    function (e) {
-        var colors = Highcharts.getOptions().colors,
-            i = 0,
-            nodes = {};
-        e.options.data.forEach(function (link) {
-
-            if (link[0] === 'Proto Indo-European') {
-                nodes['Proto Indo-European'] = {
-                    id: 'Proto Indo-European',
-                    marker: {
-                        radius: 20
-                    }
-                };
-                nodes[link[1]] = {
-                    id: link[1],
-                    marker: {
-                        radius: 10
-                    },
-                    color: colors[i++]
-                };
-            } else if (nodes[link[0]] && nodes[link[0]].color) {
-                nodes[link[1]] = {
-                    id: link[1],
-                    color: nodes[link[0]].color
-                };
-            }
-        });
-
-        e.options.nodes = Object.keys(nodes).map(function (id) {
-            return nodes[id];
-        });
-    }
-);
-
-////////////////////////////
-
-
 export default {
+    components: {
+        InfoSeries,
+    },
     data() {
         return {
             chartOptions: {
@@ -102,20 +63,22 @@ export default {
                         },
                         linkFormat: '',
                         allowOverlap: true
+                    },                
+                    link: {
+                        width: 3,
                     },
-                    data: [
-
-                    ]
+                    data: [],
+                    nodes: [],
                 }],
                 chart: {
                     type: 'networkgraph',
                     marginTop: 80
                 },
                 title: {
-                        text: 'Tweets sobre una serie'
+                        text: 'Tuits sobre una serie'
                     },
                 subtitle: {
-                    text: '(estadísticas obtenidas de la red social Twitter)',
+                    text: '(estadísticas obtenidas de la red social Twitter)<br>Mayor tamaño del nodo denota mayor <b>número de seguidores</b>'
                 },
                 plotOptions: {
                     networkgraph: {
@@ -127,73 +90,111 @@ export default {
                         }
                     }
                 },
+                tooltip: {
+                    enabled: true,
+                    useHTML: true,
+                    formatter: function () {
+                        var texto = '';
+                        if (this.point.esSerie == false) {
+                            texto = texto.concat('<b>Número de seguidores del tuitero:</b> ' + this.point.seguidores + '<br>');
+                            texto = texto.concat('<b>Mensaje:</b> ' + this.point.mensaje + '<br>');
+                        } else {
+                            texto = texto.concat('<b>(Serie)</b>');
+                        }
+                        return texto;
+                    }
+                }
             },
             seriesInfo: [],
             radio: '',
             desactivarBoton: true,
+            nodoSerie: {},
         }
     },
     methods: {
-         initChart() {
-             this.desactivarBoton = true
+        async initChart() {
+            this.desactivarBoton = true
 
-             axios.get('http://localhost:8080/series').then(response => {
-                 this.seriesInfo = response.data
+            try {
+                await this.getSeries()
+            } catch(error) {
+                console.log(error)
+            }
 
-                 var nombreSerie = this.seriesInfo[0].nombre
-                 this.radio = nombreSerie
-                 this.chartOptions.title.text = 'Tweets sobre una serie: '.concat(nombreSerie)
-                 var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
+            var nombreSerie = this.seriesInfo[0].nombre
+            this.radio = nombreSerie
+            this.chartOptions.title.text = 'Tuits sobre una serie: '.concat(nombreSerie)
+            var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
 
-                 axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal).then(response => {
-                     var relacionInfo = response.data
-                     var arreglo=[]
+            this.nodoSerie = {esSerie: true, id: nombreSerie, marker: {radius: 30}}
+            this.chartOptions.series[0].nodes.push(this.nodoSerie)
 
-                     var largo = relacionInfo.length
-                     var i=0
+            axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal).then(response => {
+                var tuitsInfo = response.data
 
-                     while (i < largo) {
-                         arreglo.push(nombreSerieFinal)
-                         arreglo.push(relacionInfo[i].userName)
-                         //this.chartOptions.xAxis.categories.push(tuiteroInfo[i].userName)
-                         this.chartOptions.series[0].data.push(arreglo)
-                         arreglo=[]
-                         i++
-                     }
-                     this.desactivarBoton = false
-                 })
-             })
-         },
-         updateChart() {
-             this.desactivarBoton = true
+                var maxFollowers = 0
+                for (var tuit of tuitsInfo) {
+                    if (tuit.followers > maxFollowers) {
+                        maxFollowers = tuit.followers
+                    }
+                }
 
-             //this.chartOptions.xAxis.categories.length = 0
-             this.chartOptions.series[0].data.length = 0
+                for (var tuit of tuitsInfo) {
+                    var tamanoNodo = (tuit.followers / maxFollowers) * 30
+                    var nodoUsuario = {esSerie: false, id: tuit.userName, color: '#C74ABF', marker: {radius: tamanoNodo}, seguidores: tuit.followers, mensaje: tuit.text}
 
-             var nombreSerie = this.radio
-             console.log(nombreSerie)
-             this.chartOptions.title.text = 'Tweets sobre una serie: '.concat(nombreSerie)
-             var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
+                    this.chartOptions.series[0].data.push({from: this.nodoSerie.id, to: nodoUsuario.id})
 
-             axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal).then(response => {
-                  var relacionInfo = response.data
-                  var arreglo=[]
+                    this.chartOptions.series[0].nodes.push(nodoUsuario)
+                }
 
-                     var largo = relacionInfo.length
-                     var i=0
+                this.desactivarBoton = false
+                this.nodoSerie = {}
+            })
+        },
 
-                     while (i < largo) {
-                         arreglo.push(nombreSerieFinal)
-                         arreglo.push(relacionInfo[i].userName)
-                         console.log(arreglo)
-                         //this.chartOptions.xAxis.categories.push(tuiteroInfo[i].userName)
-                         this.chartOptions.series[0].data.push(arreglo)
-                         arreglo=[]
-                         i++
-                     }
-                  this.desactivarBoton = false
-             })
-         }
+        updateChart() {
+            this.desactivarBoton = true
+
+            this.chartOptions.series[0].data.length = 0
+            this.chartOptions.series[0].nodes.length = 0
+            
+            var nombreSerie = this.radio
+            this.chartOptions.title.text = 'Tuits sobre una serie: '.concat(nombreSerie)
+            var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
+
+            this.nodoSerie = {esSerie: true, id: nombreSerie, marker: {radius: 30}}
+            this.chartOptions.series[0].nodes.push(this.nodoSerie)
+
+            axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal).then(response => {
+                var tuitsInfo = response.data
+
+                var maxFollowers = 0
+                for (var tuit of tuitsInfo) {
+                    if (tuit.followers > maxFollowers) {
+                        maxFollowers = tuit.followers
+                    }
+                }
+
+                for (var tuit of tuitsInfo) {
+                    var tamanoNodo = (tuit.followers / maxFollowers) * 30
+                    var nodoUsuario = {esSerie: false, id: tuit.userName, color: '#C74ABF', marker: {radius: tamanoNodo}, seguidores: tuit.followers, mensaje: tuit.text}
+
+                    this.chartOptions.series[0].data.push({from: this.nodoSerie.id, to: nodoUsuario.id})
+
+                    this.chartOptions.series[0].nodes.push(nodoUsuario)
+                }
+
+                this.desactivarBoton = false
+                this.nodoSerie = {}
+            })
+        },
+
+        getSeries() {
+            return axios.get('http://localhost:8080/series').then(response => {
+                this.seriesInfo = response.data
+            })
+        }
     },
     created() {
         this.initChart()
