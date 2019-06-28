@@ -138,6 +138,12 @@ export default {
                         i++
                     }
 
+                    while (i < 5) {
+                        this.chartOptions.xAxis.categories.push("Sin información")
+                        this.chartOptions.series[0].data.push(0)
+                        i++
+                    }
+
                     this.desactivarBoton = false
                 })
             })
@@ -164,141 +170,19 @@ export default {
                     this.chartOptions.series[0].data.push(tuiteroInfo[i].followers)
                     i++
                 }
+                
+                while (i < 5) {
+                    this.chartOptions.xAxis.categories.push("Sin información")
+                    this.chartOptions.series[0].data.push(0)
+                    i++
+                }
 
                 this.desactivarBoton = false
             })
         }
-
-        ///////////////////////////////
-
-        // INTENTO DE CARGAR LOS DATOS DE FORMA SINCRONA. LOS ARREGLOS SERIES.DATA DEL CHART SE ACTUALIZAN PERO POR ALGUNA RAZON EL CHART NO SE REDIBUJA.
-
-        /* async getUsuarios() {
-            try {
-                await this.getSeries()
-            } catch(error) {
-                console.log(error)
-            }
-
-            this.chartOptions.xAxis.length = 0
-            this.chartOptions.series[0].data.length = 0
-            this.chartOptions.series[1].data.length = 0
-            this.chartOptions.series[2].data.length = 0
-            this.chartOptions.series[3].data.length = 0
-            this.chartOptions.series[4].data.length = 0
-
-            var nroSeries = this.seriesInfo.length
-
-            var i = 0
-            for (i = 0; i < nroSeries; i++) {
-                this.chartOptions.xAxis.categories.push("-")
-                this.chartOptions.series[0].data.push(0)
-                this.chartOptions.series[1].data.push(0)
-                this.chartOptions.series[2].data.push(0)
-                this.chartOptions.series[3].data.push(0)
-                this.chartOptions.series[4].data.push(0)
-            }
-
-            var nombreSerieFinal = ''
-
-            var indiceSerie = 0
-            for (var serie of this.seriesInfo) {
-                this.checkList.push(serie.nombre)
-                this.chartOptions.xAxis.categories[indiceSerie] = serie.nombre
-                nombreSerieFinal = serie.nombre.replace(/ /g, "_")
-                this.getUsuariosSerie(nombreSerieFinal, indiceSerie)
-                indiceSerie++
-            }
-        },
-
-        getSeries() {
-            return axios.get('http://localhost:8080/series').then(response => {
-                this.seriesInfo = response.data
-            })
-        },
-
-        getUsuariosSerie(nombreSerieFinal, indiceSerie) {
-            axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal + '/top=5').then(response => {
-                var tuiteroInfo = response.data
-
-                var largo = tuiteroInfo.length
-                var i = 0
-
-                while (i < largo) {
-                    this.chartOptions.series[i].data[indiceSerie] = tuiteroInfo[i].followers
-                    i++
-                }
-
-                while (i < 5) {
-                    this.chartOptions.series[i].data[indiceSerie] = 0
-                    i++
-                }
-            })
-        } */
-
-        ///////////////////////////////
-
-        // LO SIGUIENTE FUNCIONA CARGANDO LOS TUITEROS DE TODAS LAS SERIES, PERO REQUIERE TRABAJAR DE FORMA ASINCRONA, POR LO QUE ES MUY, MUY LENTO.
-
-        /* async getUsuarios() {
-            try {
-                await this.getSeries()
-            } catch(error) {
-                console.log(error)
-            }
-
-            this.chartOptions.xAxis.length = 0
-            this.chartOptions.series[0].data.length = 0
-            this.chartOptions.series[1].data.length = 0
-            this.chartOptions.series[2].data.length = 0
-            this.chartOptions.series[3].data.length = 0
-            this.chartOptions.series[4].data.length = 0
-
-            var nombreSerieFinal = ''
-
-            for (var serie of this.seriesInfo) {
-                this.checkList.push(serie.nombre)
-                this.chartOptions.xAxis.categories.push(serie.nombre)
-                nombreSerieFinal = serie.nombre.replace(/ /g, "_")
-                try {
-                    await this.getUsuariosSerie(nombreSerieFinal)
-                } catch(error) {
-                    console.log(error)
-                }
-            }
-        },
-
-        getSeries() {
-            return axios.get('http://localhost:8080/series').then(response => {
-                this.seriesInfo = response.data
-            })
-        },
-
-        getUsuariosSerie(nombreSerieFinal) {
-            return axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal + '/top=5').then(response => {
-                var tuiteroInfo = response.data
-
-                var largo = tuiteroInfo.length
-                var i = 0
-                while (i < largo) {
-                    this.chartOptions.series[i].data.push(
-                        tuiteroInfo[i].followers
-                    )
-                    i++
-                }
-
-                while (i < 5) {
-                    this.chartOptions.series[i].data.push(0)
-                    i++
-                }
-            })
-        } */
     },
     created() {
         this.initChart()
-
-        // PARA LOS METODOS COMENTADOS ARRIBA
-        // this.getUsuarios()
     },
 }
 </script>

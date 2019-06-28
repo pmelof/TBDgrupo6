@@ -1,10 +1,34 @@
 <template>
   <el-container>
     <el-header>
-      <h1>Percepción de series según el peso del usuario</h1>
+      <h1>Percepción de series según el peso del tuitero</h1>
     </el-header>
     <el-main>
-        <el-col :span="24">
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <el-card class="box-card">
+            <h3>Filtro</h3>
+            <h5>
+              Seleccione una serie
+            </h5>
+            <div id="radio">
+                <el-radio-group v-model="radio">
+                  <el-radio v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
+                    <InfoSeries :nombreSerie="serie.nombre">{{serie.nombre}}</InfoSeries>
+                  </el-radio>
+                </el-radio-group>
+            </div>
+            <br>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              v-on:click="updateChart"
+              :disabled="desactivarBoton"
+              >Mostrar datos
+            </el-button>
+          </el-card>
+        </el-col>
+        <el-col :span="18">
           <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
@@ -18,9 +42,13 @@
 import axios from 'axios'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/networkgraph.js'
+import InfoSeries from '@/components/InfoSeries.vue'
 exportingInit(Highcharts)
 
 export default {
+    components: {
+        InfoSeries,
+    },
     data() {
         return {
             chartOptions: {
@@ -35,38 +63,22 @@ export default {
                         },
                         linkFormat: '',
                         allowOverlap: true
+                    },                
+                    link: {
+                        width: 3,
                     },
-                    data: [
-                        ['Proto Indo-European', 'Balto-Slavic'],
-                        ['Proto Indo-European', 'Germanic'],
-                        ['Proto Indo-European', 'Celtic'],
-                        ['Proto Indo-European', 'Italic'],
-                        ['Proto Indo-European', 'Hellenic'],
-                        ['Proto Indo-European', 'Anatolian'],
-                        ['Proto Indo-European', 'Indo-Iranian'],
-                        ['Proto Indo-European', 'Tocharian'],
-                        ['Indo-Iranian', 'Dardic'],
-                        ['Indo-Iranian', 'Indic'],
-                        ['Indo-Iranian', 'Iranian'],
-                        ['Iranian', 'Old Persian'],
-                        ['Old Persian', 'Middle Persian'],
-                        ['Indic', 'Sanskrit'],
-                        ['Italic', 'Osco-Umbrian'],
-                        ['Italic', 'Latino-Faliscan'],
-                        ['Latino-Faliscan', 'Latin'],
-                        ['Celtic', 'Brythonic'],
-                        ['Celtic', 'Goidelic']
-                    ]
+                    data: [],
+                    nodes: [],
                 }],
                 chart: {
                     type: 'networkgraph',
                     marginTop: 80
                 },
                 title: {
-                        text: 'Percecpión de series según el peso del usuario'
+                        text: 'Percecpión de series según el peso del tuitero'
                     },
                 subtitle: {
-                    text: '(estadísticas obtenidas de la red social Twitter)',
+                    text: '(estadísticas obtenidas de la red social Twitter)<br>(<b>tamaño del nodo:</b> número de seguidores, <b>color del enlace:</b> valorización del mensaje)',
                 },
                 plotOptions: {
                     networkgraph: {
@@ -78,34 +90,131 @@ export default {
                         }
                     }
                 },
+                tooltip: {
+                    enabled: true,
+                    useHTML: true,
+                    formatter: function () {
+                        var texto = '';
+                        if (this.point.esSerie == false) {
+                            texto = texto.concat('<b>Número de seguidores del tuitero:</b> ' + this.point.seguidores + '<br>');
+                            texto = texto.concat('<b>Mensaje:</b> ' + this.point.mensaje + '<br>');
+                            if (this.point.valorizacion == 1) {
+                                texto = texto.concat('<b>Valorización:</b> Positiva');
+                            } else if (this.point.valorizacion == -1) {
+                                texto = texto.concat('<b>Valorización:</b> Negativa');
+                            } else {
+                                texto = texto.concat('<b>Valorización:</b> Neutra');
+                            }
+                        } else {
+                            texto = texto.concat('<b>(Serie)</b>')
+                        }
+                        return texto;
+                    }
+                }
             },
             seriesInfo: [],
+            radio: '',
+            desactivarBoton: true,
+            nodoSerie: {},
         }
     },
     methods: {
-        // getSerie() {
-        //     axios.get('http://localhost:8080/series').then(response => {
-        //         this.seriesInfo = response.data
-        //         for (var serie of this.seriesInfo) {
-        //             if (serie.estadisticaTweetSerie != null) {
-        //                 this.chartOptions.xAxis.categories.push(serie.nombre)
-        //                 // console.log(serie.nombre)
-        //                 this.chartOptions.series[0].data.push(
-        //                     serie.estadisticaTweetSerie.nroTweetsPositivos
-        //                 )
-        //                 this.chartOptions.series[1].data.push(
-        //                     serie.estadisticaTweetSerie.nroTweetsNeutros
-        //                 )
-        //                 this.chartOptions.series[2].data.push(
-        //                     serie.estadisticaTweetSerie.nroTweetsNegativos
-        //                 )
-        //             }
-        //         }
-        //     })
-        // },
+        initChart() {
+            this.desactivarBoton = true
+
+            axios.get('http://localhost:8080/series').then(response => {
+                this.seriesInfo = response.data
+
+                var nombreSerie = this.seriesInfo[0].nombre
+                this.radio = nombreSerie
+                this.chartOptions.title.text = 'Percepción de series según el peso del tuitero: '.concat(nombreSerie)
+                var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
+
+                this.nodoSerie = {esSerie: true, id: nombreSerie, marker: {radius: 30}}
+                this.chartOptions.series[0].nodes.push(this.nodoSerie)
+
+                axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal).then(response => {
+                    var tuitsInfo = response.data
+
+                    var maxFollowers = 0
+                    for (var tuit of tuitsInfo) {
+                        if (tuit.followers > maxFollowers) {
+                            maxFollowers = tuit.followers
+                        }
+                    }
+
+                    for (var tuit of tuitsInfo) {
+                        var tamanoNodo = (tuit.followers / maxFollowers) * 30
+                        var nodoUsuario = {esSerie: false, id: tuit.userName, color: '#C74ABF', marker: {radius: tamanoNodo}, seguidores: tuit.followers, mensaje: tuit.text, valorizacion: tuit.valorizacion}
+
+                        var colorLink = ''
+                        if (nodoUsuario.valorizacion == 1) {
+                            colorLink = '#56FF84'
+                        } else if (nodoUsuario.valorizacion == -1) {
+                            colorLink = '#FF9291'
+                        } else {
+                            colorLink = 'grey'
+                        }
+
+                        this.chartOptions.series[0].data.push({from: this.nodoSerie.id, to: nodoUsuario.id, color: colorLink})
+
+                        this.chartOptions.series[0].nodes.push(nodoUsuario)
+                    }
+
+                    this.desactivarBoton = false
+                    this.nodoSerie = {}
+                })
+            })
+        },
+
+        updateChart() {
+            this.desactivarBoton = true
+
+            this.chartOptions.series[0].data.length = 0
+            this.chartOptions.series[0].nodes.length = 0
+            
+            var nombreSerie = this.radio
+            this.chartOptions.title.text = 'Percepción de series según el peso del tuitero: '.concat(nombreSerie)
+            var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
+
+            this.nodoSerie = {esSerie: true, id: nombreSerie, marker: {radius: 30}}
+            this.chartOptions.series[0].nodes.push(this.nodoSerie)
+
+            axios.get('http://localhost:8080/neo4j/' + nombreSerieFinal).then(response => {
+                var tuitsInfo = response.data
+
+                var maxFollowers = 0
+                for (var tuit of tuitsInfo) {
+                    if (tuit.followers > maxFollowers) {
+                        maxFollowers = tuit.followers
+                    }
+                }
+
+                for (var tuit of tuitsInfo) {
+                    var tamanoNodo = (tuit.followers / maxFollowers) * 30
+                    var nodoUsuario = {esSerie: false, id: tuit.userName, color: '#C74ABF', marker: {radius: tamanoNodo}, seguidores: tuit.followers, mensaje: tuit.text, valorizacion: tuit.valorizacion}
+
+                    var colorLink = ''
+                    if (nodoUsuario.valorizacion == 1) {
+                        colorLink = '#56FF84'
+                    } else if (nodoUsuario.valorizacion == -1) {
+                        colorLink = '#FF9291'
+                    } else {
+                        colorLink = 'grey'
+                    }
+
+                    this.chartOptions.series[0].data.push({from: this.nodoSerie.id, to: nodoUsuario.id, color: colorLink})
+
+                    this.chartOptions.series[0].nodes.push(nodoUsuario)
+                }
+
+                this.desactivarBoton = false
+                this.nodoSerie = {}
+            })
+        }
     },
     created() {
-        // this.getSerie()
+        this.initChart()
     },
 }
 </script>
