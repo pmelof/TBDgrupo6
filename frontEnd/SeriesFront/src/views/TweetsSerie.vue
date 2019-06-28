@@ -5,8 +5,31 @@
     </el-header>
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="24">
-          <el-card class="box-card">
+              <el-col :span="6">
+                <el-card class="box-card">
+                  <h3>Filtro</h3>
+                  <h5>
+                    Seleccione una serie
+                  </h5>
+                  <div id="radio">
+                      <el-radio-group v-model="radio">
+                        <el-radio v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
+                          <InfoSeries :nombreSerie="serie.nombre">{{serie.nombre}}</InfoSeries>
+                        </el-radio>
+                      </el-radio-group>
+                  </div>
+                  <br>
+                  <el-button
+                    type="primary"
+                    icon="el-icon-search"
+                    v-on:click="updateChart"
+                    :disabled="desactivarBoton"
+                    >Mostrar datos
+                  </el-button>
+                </el-card>
+              </el-col>
+              <el-col :span="18">
+            <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
         </el-col>
@@ -81,28 +104,33 @@ export default {
                 },
             },
             seriesInfo: [],
+            radio: '',
+            desactivarBoton: true,
         }
     },
     methods: {
-        // getSerie() {
-        //     axios.get('http://localhost:8080/series').then(response => {
-        //         this.seriesInfo = response.data
-        //         for (var serie of this.seriesInfo) {
-        //             if (serie.estadisticaTweetSerie != null) {
-        //                 this.chartOptions.xAxis.categories.push(serie.nombre)
-        //                 // console.log(serie.nombre)
-        //                 this.chartOptions.series[0].data.push(
-        //                     serie.estadisticaTweetSerie.nroTweetsPositivos
-        //                 )
-        //                 this.chartOptions.series[1].data.push(
-        //                     serie.estadisticaTweetSerie.nroTweetsNeutros
-        //                 )
-        //                 this.chartOptions.series[2].data.push(
-        //                     serie.estadisticaTweetSerie.nroTweetsNegativos
-        //                 )
-        //             }
-        //         }
-        //     })
+        // initChart() {
+        //     this.desactivarBoton = true
+             getSerie() {
+                 axios.get('http://localhost:8080/series').then(response => {
+                     this.seriesInfo = response.data
+                     for (var serie of this.seriesInfo) {
+                         if (serie.estadisticaTweetSerie != null) {
+                             this.chartOptions.xAxis.categories.push(serie.nombre)
+                             // console.log(serie.nombre)
+                             this.chartOptions.series[0].data.push(
+                                 serie.estadisticaTweetSerie.nroTweetsPositivos
+                             )
+                             this.chartOptions.series[1].data.push(
+                                 serie.estadisticaTweetSerie.nroTweetsNeutros
+                             )
+                             this.chartOptions.series[2].data.push(
+                                 serie.estadisticaTweetSerie.nroTweetsNegativos
+                             )
+                         }
+                     }
+                 })
+             },
         // },
     },
     created() {
@@ -115,6 +143,7 @@ export default {
 .el-card {
     width: 100%;
     height: 80vh;
+    overflow-y: auto;
 }
 .el-header {
     display: flex;

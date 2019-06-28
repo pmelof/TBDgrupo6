@@ -152,14 +152,39 @@ public class Neo4jServicio {
     }
 
 
+    @RequestMapping(value = "/{serie}", method = RequestMethod.GET)
+    public ArrayList<Usuario> usuariosBySerie (@PathVariable("serie") String serie){
 
+        Driver driver = GraphDatabase.driver( "bolt://localhost", AuthTokens.basic( "neo4j", "1234" ) );
+        Session session = driver.session();
 
+        serie = serie.replace("_"," ");
 
+        StatementResult nodoResultado = session.run("MATCH (u:Usuario)" +
+                "match (s:Serie) where s.name='"+serie+"' " +
+                "match (u)-[label]->(s)" +
+                "return u.name as name, u.followers as followers, label.valorizacion as valor, label.text as texto");
 
+        ArrayList<Usuario> resultadosNeo4j = new ArrayList<>();
 
+        while ( nodoResultado.hasNext()){
+            Record record = nodoResultado.next();
+            String userName = record.get("name").toString().replace("\"","");
+            int followers =  Integer.parseInt(record.get("followers").toString());
+            String texto = record.get("texto").toString().replace("\"","");
+            int valorizacion =  Integer.parseInt(record.get("valor").toString());
 
-
-
+            Usuario usuario = new Usuario();
+            usuario.setUserName(userName);
+            usuario.setFollowers(followers);
+            usuario.setText(texto);
+            usuario.setValorizacion(valorizacion);
+            resultadosNeo4j.add(usuario);
+        }
+        session.close();
+        driver.close();
+        return resultadosNeo4j;
+    }
 
 }
 
