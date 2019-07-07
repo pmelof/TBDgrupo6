@@ -38,7 +38,7 @@ public class Neo4jServicio {
     private ServicioAnalizadorSentimental servicioAnalizadorSentimental;
 
 
-    @PostConstruct
+    //@PostConstruct
     public void SemilleroBD() {
 
         Driver driver = GraphDatabase.driver( "bolt://localhost", AuthTokens.basic( "neo4j", "1234" ) );
@@ -76,7 +76,7 @@ public class Neo4jServicio {
 
 
                 // CREAR NODO USUARIO
-                StatementResult verificacion = session.run("match (u:Usuario) where u.name='"+usuarioTwitter+"' return u.name as name, u.followers as followers");
+                StatementResult verificacion = session.run("match (u:Usuario) where u.name='"+usuarioTwitter+"' return u");
 
                 if(!verificacion.hasNext()){
                     session.run("CREATE(u:Usuario {name:'" + usuarioTwitter + "',followers:" + usuarioFollowers + "})");
@@ -130,6 +130,10 @@ public class Neo4jServicio {
             usuario.setFollowers(followers);
             usuariosNeo4j.add(usuario);
         }
+
+
+
+
         session.close();
         driver.close();
         return usuariosNeo4j;
@@ -146,7 +150,7 @@ public class Neo4jServicio {
         StatementResult nodosUsuarios = session.run("MATCH (u:Usuario) " +
                 "match (s:Serie) where s.name='"+serie+"' " +
                 "match (u)-[label]->(s)" +
-                "return u.name as name, u.followers as followers order by followers desc limit "+rank);
+                "return distinct u.name as name, u.followers as followers order by followers desc limit "+rank);
 
         ArrayList<Usuario> usuariosNeo4j = new ArrayList<>();
 
