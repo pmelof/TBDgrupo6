@@ -64,7 +64,7 @@ export default {
                     text: 'Tuiteros más influyentes por serie: ',
                 },
                 subtitle: {
-                    text: '(estadísticas obtenidas de la red social Twitter)',
+                    text: '(Estadísticas obtenidas de la red social Twitter)',
                 },
                 xAxis: {
                     categories: [],

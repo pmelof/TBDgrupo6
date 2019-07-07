@@ -236,6 +236,7 @@ export default {
 .el-card {
     width: 100%;
     height: 80vh;
+    overflow-y: auto;
 }
 .el-header {
     display: flex;
