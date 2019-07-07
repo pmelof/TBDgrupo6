@@ -18,6 +18,7 @@ import tbd.taller1.modelo.Serie;
 import tbd.taller1.repositorio.SerieRepositorio;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +69,7 @@ public class Neo4jServicio {
             int aux=0;
             for (Tweet tweet:tweets_series) {
 
-                if(aux==20)break;
+                ///if(aux==20)break;
                 // INFO USUARIO
                 String usuarioTwitter = tweet.getUserScreenName();  // NOMBRE USUARIO
                 int usuarioFollowers = tweet.getUserFollowersCount();
@@ -82,16 +83,28 @@ public class Neo4jServicio {
                 }
                 // INFO TWEET
                 String textTweet = tweet.getText();
-                textTweet = textTweet.replaceAll("'","");
+                textTweet = textTweet.replace("'","");
+                textTweet = textTweet.replace("\\","");
+
 
                 // ANALISIS SENTIMENTAL AL TWEET DEL USUARIO
                 int opinion = servicioAnalizadorSentimental.classify(textTweet);
 
+
+
                 // CREAR RELACION USUARIO-TWITTER
-                session.run("match (s:Serie) where s.name='"+nombreSerie+"'"
-                    + "  match (u:Usuario) where u.name='"+usuarioTwitter+"'"
-                    + "  create (u)-[label:opinion_serie {valorizacion:"+opinion+", text:'"+textTweet+"'}]->(s)");
-                aux++;
+
+                try {
+                    //System.out.println(textTweet);
+
+                    session.run("match (s:Serie) where s.name='" + nombreSerie + "'"
+                            + "  match (u:Usuario) where u.name='" + usuarioTwitter + "'"
+                            + "  create (u)-[label:opinion_serie {valorizacion:" + opinion + ", text:'" + textTweet + "'}]->(s)");
+
+                    /////aux++;
+                }catch (EntityNotFoundException e){
+                    System.out.println("uff");
+                }
             }
         }
         session.close();
