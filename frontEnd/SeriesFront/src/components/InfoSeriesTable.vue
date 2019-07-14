@@ -1,6 +1,5 @@
   <template>
     <el-row>
-      </el-col>
       <el-col :span="12">
         <div class="poster">
           <img v-bind:src="urlImg" id="poster" alt="poster" width="300">

@@ -52,4 +52,8 @@ body {
 .el-container {
     height: -webkit-fill-available;
 }
+
+.el-main {
+  padding: 0;
+}
 </style>

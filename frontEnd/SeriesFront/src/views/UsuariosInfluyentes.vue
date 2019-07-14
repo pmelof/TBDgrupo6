@@ -191,7 +191,6 @@ export default {
 .el-card {
     width: 100%;
     height: 80vh;
-    overflow-y: auto;
 }
 .el-header {
     display: flex;
@@ -274,5 +273,16 @@ export default {
     text-decoration: none;
     display: inline-block;
     font-size: 15px;
+}
+#radio {
+    height: 58vh;
+    overflow-y: auto;
+}
+
+.el-container {
+    padding: 30px;
+}
+.box-card{
+    overflow-y: auto;
 }
 </style>

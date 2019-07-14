@@ -5,7 +5,7 @@
     </el-header>
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6">
+        <el-col :span="8">
           <el-card class="box-card">
             <h3>Filtro</h3>
             <h5>
@@ -18,22 +18,27 @@
                     <InfoSeries :nombreSerie="personaje.actor.nombre">{{personaje.actor.nombre}}</InfoSeries>
                   </el-checkbox>
                 </el-checkbox-group>
-            </div>
+            </div> 
             <br>
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              v-on:click="updateChart"
-              >Filtrar</el-button>
-            <br>
-            <br>
-            <el-button
-              type="primary"
-              v-on:click="removeFilter"
-              >Quitar filtro</el-button>
+            <el-row :gutter="5">
+                <el-col :span="12">
+                    <el-button
+                    type="primary"
+                    icon="el-icon-search"
+                    v-on:click="updateChart"
+                    >Filtrar</el-button>    
+                </el-col>
+
+                <el-col :span="12">
+                    <el-button
+                    type="primary"
+                    v-on:click="removeFilter"
+                    >Limpiar</el-button>
+                </el-col>
+            </el-row>
           </el-card>
         </el-col>
-        <el-col :span="18">
+        <el-col :span="16">
           <el-card class="box-card">
             <highcharts :options="chartOptions"></highcharts>
           </el-card>
@@ -210,7 +215,6 @@ export default {
 .el-card {
     width: 100%;
     height: 80vh;
-    overflow-y: auto;
 }
 .el-header {
     display: flex;
@@ -293,5 +297,29 @@ export default {
     text-decoration: none;
     display: inline-block;
     font-size: 15px;
+}
+
+.el-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    padding-left: 5%;
+}
+
+.el-button {
+    width: 100%;
+}
+
+#checkbox {
+    height: 54vh;
+    overflow-y: auto;
+}
+
+.el-container {
+    padding: 30px;
+}
+
+.box-card{
+    overflow-y: auto;
 }
 </style>

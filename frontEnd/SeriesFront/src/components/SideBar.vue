@@ -2,7 +2,7 @@
   <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
     <div class="logoSpace">
       <router-link to="/">
-        <img src="@/assets/Logo series.png" id="logo" alt="logo">
+        <img src="@/assets/LogoSeries2.png" id="logo" alt="logo">
       </router-link>
     </div>
     <el-divider></el-divider>
