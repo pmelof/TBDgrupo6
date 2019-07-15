@@ -337,7 +337,7 @@ export default {
 }
 
 #checkbox {
-    height: 45vh;
+    height: 50vh;
     overflow-y: auto;
 }
 
