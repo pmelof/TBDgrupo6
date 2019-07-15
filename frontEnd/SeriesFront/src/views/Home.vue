@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img src="@/assets/FondoNew3.png" id="fondo" alt="fondo" class="fondo">
+    <img src="@/assets/FondoNew2.png" id="fondo" alt="fondo" class="fondo">
   </div>
 </template>
 
