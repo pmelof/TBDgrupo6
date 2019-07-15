@@ -54,6 +54,6 @@ body {
 }
 
 .el-main {
-  padding: 0;
+  padding: 10px;
 }
 </style>
