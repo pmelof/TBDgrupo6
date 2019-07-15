@@ -9,14 +9,15 @@
           <el-card class="box-card">
             <h3>Filtro</h3>
             <h5>
-              Seleccione una serie
+              Seleccione una serie marcando la casilla 
+              Desmarque la casilla para escoger otra
             </h5>
             <div id="radio">
-                <el-radio-group v-model="radio">
-                  <el-radio v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
+                <el-checkbox-group v-model="checkbox" :max="1">
+                  <el-checkbox v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
                     <InfoSeries :nombreSerie="serie.nombre">{{serie.nombre}}</InfoSeries>
-                  </el-radio>
-                </el-radio-group>
+                  </el-checkbox>
+                </el-checkbox-group>
             </div>
             <br>
             <el-button
@@ -110,7 +111,7 @@ export default {
                 },
             },
             seriesInfo: [],
-            radio: '',
+            checkbox: [],
             desactivarBoton: true,
         }
     },
@@ -122,7 +123,7 @@ export default {
                 this.seriesInfo = response.data
 
                 var nombreSerie = this.seriesInfo[0].nombre
-                this.radio = nombreSerie
+                this.checkbox.push(nombreSerie)
                 this.chartOptions.title.text = 'Tuiteros más influyentes por serie: '.concat(nombreSerie)
                 var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
 
@@ -155,7 +156,7 @@ export default {
             this.chartOptions.xAxis.categories.length = 0
             this.chartOptions.series[0].data.length = 0
             
-            var nombreSerie = this.radio
+            var nombreSerie = this.checkbox[0]
             this.chartOptions.title.text = 'Tuiteros más influyentes por serie: '.concat(nombreSerie)
             var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
 
@@ -275,7 +276,7 @@ export default {
     font-size: 15px;
 }
 #radio {
-    height: 58vh;
+    height: 52vh;
     overflow-y: auto;
 }
 
@@ -284,5 +285,16 @@ export default {
 }
 .box-card{
     overflow-y: auto;
+}
+
+.el-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    padding-left: 5%;
+}
+
+.el-button {
+    width: 100%;
 }
 </style>

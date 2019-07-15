@@ -9,23 +9,23 @@
           <el-card class="box-card">
             <h3>Filtro</h3>
             <h5>
-              Seleccione una serie
+              Seleccione una serie marcando la casilla 
+              Desmarque la casilla para escoger otra
             </h5>
             <div id="radio">
-                <el-radio-group v-model="radio">
-                  <el-radio v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
+                <el-checkbox-group v-model="checkbox" :max="1">
+                  <el-checkbox v-for="serie in this.seriesInfo" :label="serie.nombre" :key="serie.nombre">
                     <InfoSeries :nombreSerie="serie.nombre">{{serie.nombre}}</InfoSeries>
-                  </el-radio>
-                </el-radio-group>
+                  </el-checkbox>
+                </el-checkbox-group>
             </div>
             <br>
             <el-button
-              type="primary"
-              icon="el-icon-search"
-              v-on:click="updateChart"
-              :disabled="desactivarBoton"
-              >Mostrar datos
-            </el-button>
+            type="primary"
+            icon="el-icon-search"
+            v-on:click="updateChart"
+            :disabled="desactivarBoton"
+            >Filtrar</el-button>    
           </el-card>
         </el-col>
         <el-col :span="18">
@@ -106,7 +106,7 @@ export default {
                 }
             },
             seriesInfo: [],
-            radio: '',
+            checkbox: [],
             desactivarBoton: true,
             nodoSerie: {},
         }
@@ -122,7 +122,7 @@ export default {
             }
 
             var nombreSerie = this.seriesInfo[0].nombre
-            this.radio = nombreSerie
+            this.checkbox.push(nombreSerie)
             this.chartOptions.title.text = 'Tuits sobre una serie: '.concat(nombreSerie)
             var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
 
@@ -159,7 +159,7 @@ export default {
             this.chartOptions.series[0].data.length = 0
             this.chartOptions.series[0].nodes.length = 0
             
-            var nombreSerie = this.radio
+            var nombreSerie = this.checkbox[0]
             this.chartOptions.title.text = 'Tuits sobre una serie: '.concat(nombreSerie)
             var nombreSerieFinal = nombreSerie.replace(/ /g, "_")
 
@@ -236,14 +236,8 @@ export default {
 }
 
 #radio {
-    height: 58vh;
+    height: 52vh;
     overflow-y: auto;
-}
-
-.el-radio-group {
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
 }
 
 .el-checkbox-group {
@@ -262,5 +256,9 @@ export default {
 }
 .box-card{
     overflow-y: auto;
+}
+
+.el-button {
+    width: 100%;
 }
 </style>
