@@ -9,7 +9,8 @@
           <el-card class="box-card">
             <h3>Filtro</h3>
             <h5>
-              Seleccione una serie
+              Seleccione una serie marcando la casilla 
+              Desmarque la casilla para escoger otra
             </h5>
             <div id="radio">
                 <el-checkbox-group v-model="checkbox" :max="1">
